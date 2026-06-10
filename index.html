@@ -12,72 +12,77 @@
     --page:#faf8f2; --card:#ffffff; --line:#e7e2d8; --teal:#2f6b4a; --terra:#c8552f; --amber:#c8552f;
     --serif:Georgia,"Times New Roman",serif; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
     --c-sys:#a8a296; --c-content:#2f6b4a; --c-q:#b07d2b; --c-msg:#3f6f8f; --c-reward:#2f6b4a; --c-rem:#c8552f;
+    --c-edu:#3f6f8f;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
        background:var(--page);color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
-  .wrap{flex:1;display:flex;gap:16px;padding:14px 14px 8px;min-height:0}
+  .wrap{flex:1;display:flex;gap:16px;padding:14px;min-height:0}
 
-  /* ---------- LEFT: journey ---------- */
+  /* ---------- LEFT: journey + product spec ---------- */
   .journey{flex:1 1 auto;min-width:380px;background:var(--card);border:1px solid var(--line);
            border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-height:0;box-shadow:0 2px 10px rgba(20,40,50,.05)}
-  .jhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-  .journey h1{font-family:var(--serif);font-size:22px;margin:0;color:#23302a;font-weight:600;letter-spacing:.2px}
-  .jhead .sub{font-size:12px;color:var(--muted);margin-top:4px;max-width:none;white-space:nowrap}
-  @media(max-width:1180px){.jhead .sub{white-space:normal}}
-  .zoombtn{background:#1a1a1a;color:#fff;border:none;border-radius:7px;padding:8px 13px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
-  .zoombtn:hover{background:#000}
-  .themestrip{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 6px}
+  .jhead .h1{font-family:var(--serif);font-size:22px;margin:0;color:#23302a;font-weight:600;letter-spacing:.2px}
+  .jhead .sub{font-size:12px;color:var(--muted);margin-top:4px}
+  .sectlabel{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#9b958a;font-weight:700;margin:14px 0 6px;display:flex;align-items:center;gap:8px}
+  .sectlabel::after{content:"";flex:1;height:1px;background:var(--line)}
+  .legend2{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;color:#867f73;margin:2px 0 6px}
+  .legend2 i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .themestrip{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 6px}
   .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:#867f73;background:transparent;border:1px solid var(--line);border-radius:4px;padding:5px 11px}
   .chip.on{color:#2f6b4a;background:#eaf2ec;border-color:#bcdcc8;font-weight:700}
-  .legend2{display:flex;gap:15px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.03em;color:#867f73;margin:8px 0 8px}
-  .legend2 i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 
-  .jflow{flex:1;min-height:0;overflow-x:auto;overflow-y:auto;padding:8px 4px 14px}
-  .tracklabel{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:#5d6b62;text-transform:uppercase;margin:2px 0 4px}
-  .tracklabel.l2{border-top:1px dashed var(--line);margin-top:18px;padding-top:12px}
+  .jflow{flex:0 0 auto;max-height:38vh;overflow:auto;padding:6px 4px 12px}
   .branchnote{font-family:var(--mono);font-size:10px;color:#3aa088;margin:8px 0 2px;letter-spacing:.02em}
   .lessonblock{transition:opacity .25s}
   .lessonblock.dim{opacity:.4}
   .lessonblock.dim.peek,.lessonblock.peek{opacity:1}
+  .tracklabel{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:#5d6b62;text-transform:uppercase;margin:2px 0 4px}
+  .tracklabel.l2{border-top:1px dashed var(--line);margin-top:14px;padding-top:10px}
   .track{display:flex;align-items:flex-start;gap:0;min-width:max-content;position:relative}
   .track::before{content:"";position:absolute;left:14px;right:14px;top:13px;height:1px;background:#ddd6c8}
-  .col{position:relative;display:flex;flex-direction:column;align-items:center;padding-top:26px;width:198px;flex:0 0 auto;cursor:pointer}
+  .col{position:relative;display:flex;flex-direction:column;align-items:center;padding-top:24px;width:180px;flex:0 0 auto;cursor:pointer}
   .col .dot{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:#faf8f2;border:2px solid var(--teal);z-index:2;transition:.18s}
   .col.active .dot{background:var(--terra);border-color:var(--terra);box-shadow:0 0 0 4px rgba(200,85,47,.18)}
-
   .stage{background:#fff;border:1px solid var(--line);border-top:3px solid var(--ac,#cbd5d8);border-radius:8px;
-         padding:9px 11px;width:100%;box-shadow:0 1px 2px rgba(40,36,31,.05);transition:opacity .18s,box-shadow .18s,transform .18s}
-  .stage .stype{font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ac);margin-bottom:3px;font-weight:700}
-  .stage .stitle{font-size:12.5px;font-weight:700;color:#2a2722;line-height:1.25}
-  .stage .ssyn{font-size:11px;color:#736e64;line-height:1.42;margin-top:4px}
+         padding:8px 10px;width:100%;box-shadow:0 1px 2px rgba(40,36,31,.05);transition:opacity .18s,box-shadow .18s,transform .18s}
+  .stage .stype{font-family:var(--mono);font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--ac);margin-bottom:3px;font-weight:700}
+  .stage .stitle{font-size:12px;font-weight:700;color:#2a2722;line-height:1.25}
+  .stage .ssyn{font-size:10.5px;color:#736e64;line-height:1.4;margin-top:4px}
   .type-sys{--ac:var(--c-sys)} .type-content{--ac:var(--c-content)} .type-q{--ac:var(--c-q)}
-  .type-msg{--ac:var(--c-msg)} .type-reward{--ac:var(--c-reward)}
+  .type-edu{--ac:var(--c-edu)} .type-reward{--ac:var(--c-reward)}
   .col.active .stage{box-shadow:0 0 0 2px var(--terra);background:#fffaf6}
-
   .branchlbl{font-family:var(--mono);font-size:9px;font-weight:700;color:#c8552f;margin:8px 0 4px;letter-spacing:.05em}
-  .rem{background:#fdf3ee;border:1px dashed #e6b39f;border-top:3px solid var(--c-rem);border-radius:8px;padding:9px 11px;width:100%;transition:opacity .18s,box-shadow .18s}
-  .rem .stype{font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--c-rem);font-weight:700;margin-bottom:3px}
-  .rem .stitle{font-size:12px;font-weight:700;color:#a8492f}
-  .rem .ssyn{font-size:10.5px;color:#8a6a61;line-height:1.45;margin-top:4px}
-  .rem .retry{font-family:var(--mono);font-size:9px;font-weight:700;color:#c8552f;margin-top:6px;letter-spacing:.03em}
+  .rem{background:#fdf3ee;border:1px dashed #e6b39f;border-top:3px solid var(--c-rem);border-radius:8px;padding:8px 10px;width:100%;transition:opacity .18s,box-shadow .18s}
+  .rem .stype{font-family:var(--mono);font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--c-rem);font-weight:700;margin-bottom:3px}
+  .rem .stitle{font-size:11.5px;font-weight:700;color:#a8492f}
+  .rem .ssyn{font-size:10px;color:#8a6a61;line-height:1.4;margin-top:4px}
+  .rem .retry{font-family:var(--mono);font-size:8.5px;font-weight:700;color:#c8552f;margin-top:6px;letter-spacing:.03em}
   .col.rem-on .rem{box-shadow:0 0 0 2px var(--terra);background:#fdeee7}
-  .stnote{font-family:var(--mono);font-size:9px;line-height:1.45;color:#8a6d1f;background:#fbf3df;border:1px dashed #e6cf95;border-radius:6px;padding:6px 8px;margin-top:8px;width:100%}
-
-  .conn{flex:0 0 auto;width:40px;align-self:flex-start;margin-top:26px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;height:46px}
-  .conn .arw{color:#c2bbac;font-size:18px;line-height:46px}
-  .conn .clbl{position:absolute;top:-12px;font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.04em;color:#2f6b4a;white-space:nowrap}
+  .conn{flex:0 0 auto;width:34px;align-self:flex-start;margin-top:24px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;height:44px}
+  .conn .arw{color:#c2bbac;font-size:18px;line-height:44px}
+  .conn .clbl{position:absolute;top:-12px;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.04em;color:#2f6b4a;white-space:nowrap}
   .conn.hl .arw{color:var(--teal)}
-
   .jflow.focus .stage:not(.hl), .jflow.focus .rem:not(.hl){opacity:.34}
   .jflow.focus .col.active .stage{opacity:1}
   .stage.hl{opacity:1;box-shadow:0 0 0 2px var(--teal);transform:translateY(-2px)}
   .rem.hl{opacity:1;box-shadow:0 0 0 2px var(--c-rem)}
 
+  /* product requirements / build spec */
+  .specs{flex:1 1 auto;min-height:0;overflow-y:auto;border-top:1px solid var(--line);margin-top:8px;padding-top:12px}
+  .specs .ssub{font-size:11.5px;color:var(--muted);margin:2px 0 10px}
+  .specgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .spec{background:#fff;border:1px solid var(--line);border-left:3px solid var(--ac,#2f6b4a);border-radius:8px;padding:9px 11px}
+  .spec .se{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ac,#2f6b4a);font-weight:700;margin-bottom:3px}
+  .spec .st{font-size:12px;font-weight:700;color:#2a2722;margin-bottom:3px;line-height:1.25}
+  .spec .sd{font-size:11px;color:#6f6a60;line-height:1.46}
+  .spec .ph{display:inline-block;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.04em;border-radius:9px;padding:1px 6px;margin-top:6px}
+  .spec .ph.p1{background:#e7f1ea;color:#2f6b4a} .spec .ph.p2{background:#eef1f5;color:#3f6f8f}
+
   /* ---------- RIGHT: phone (WhatsApp) ---------- */
   .right{flex:0 0 auto;height:100%;display:flex;align-items:center}
-  .phone{width:366px;max-width:42vw;height:100%;max-height:740px;background:#0b0f12;border-radius:38px;padding:9px;box-shadow:0 18px 44px rgba(20,40,50,.32);position:relative}
+  .phone{width:366px;max-width:42vw;height:100%;max-height:760px;background:#0b0f12;border-radius:38px;padding:9px;box-shadow:0 18px 44px rgba(20,40,50,.32);position:relative}
   .screen{position:relative;height:100%;border-radius:29px;overflow:hidden;display:flex;flex-direction:column;background:var(--chat-bg)}
   .notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:120px;height:21px;background:#0b0f12;border-radius:0 0 14px 14px;z-index:30}
   header.bar{background:var(--wa-green);color:#fff;display:flex;align-items:center;gap:8px;padding:27px 11px 7px;z-index:20}
@@ -104,8 +109,9 @@
   .bubble.wrong{background:#fdecea;border:1px solid #f2c2ba}
   .bubble.summary{background:#fffdf4;border:1px solid #ece2bd}
   .bubble.summary b.h{display:block;color:#8a6d1f;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
-
-  /* nutrition breakdown card (delivered as a chat message) */
+  .bubble.summary ol{margin:0;padding-left:17px}.bubble.summary li{margin:2px 0}
+  .imgcard{padding:3px}.imgcard .cap{padding:5px 5px 2px;font-size:12px}
+  .eduimg{width:248px;border-radius:8px;display:block;background:#fbf6ec}
   .nutri{padding:0;overflow:hidden;width:250px}
   .nutri .nh{background:#ecf3ee;padding:7px 10px;font-size:11px;font-weight:800;color:#176039;display:flex;justify-content:space-between;align-items:center;margin:-6px -9px 0}
   .nutri .nh .scan{font-family:var(--mono);font-size:8px;letter-spacing:.05em;color:#7a9b86;font-weight:700;text-transform:uppercase}
@@ -116,8 +122,6 @@
   .nutri tr.tot td{border-top:1.5px solid #d8d2c4;font-weight:800;color:#2a2722}
   .nutri tr.head td{font-family:var(--mono);font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:#9b958a;padding:4px 2px 2px}
   .nutri .cap2{font-size:10px;color:#8b8678;border-top:1px solid #efeadf;font-style:italic;padding-top:5px;margin-top:2px}
-
-  /* progress card (delivered as a chat message — WhatsApp has no dashboard) */
   .prog{width:250px}
   .prog .pbar{margin:6px 0 2px}
   .prog .pb-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
@@ -127,7 +131,6 @@
   .prog .fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,1,.3,1)}
   .prog .fill.cal{background:var(--cal)} .prog .fill.prot{background:var(--prot)}
   .prog .done{font-size:10px;color:#2f6b4a;font-weight:700;margin-top:5px}
-
   .typing{display:flex;gap:4px;align-items:center;background:var(--bubble-in);border-radius:9px;border-top-left-radius:2px;padding:9px 11px;width:max-content;box-shadow:0 1px 1px rgba(0,0,0,.13)}
   .typing span{width:6px;height:6px;border-radius:50%;background:#9aa6ac;animation:blink 1.2s infinite}
   .typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
@@ -135,9 +138,8 @@
   .scan-ind{display:flex;gap:7px;align-items:center;background:var(--bubble-in);border-radius:9px;border-top-left-radius:2px;padding:9px 11px;width:max-content;box-shadow:0 1px 1px rgba(0,0,0,.13);font-size:11.5px;color:#5d6b62}
   .scan-ind .sp{width:13px;height:13px;border:2px solid #cfe0d6;border-top-color:var(--wa-teal);border-radius:50%;animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-
   .vn{display:flex;align-items:center;gap:8px;min-width:190px}
-  .vn .av{width:30px;height:30px;border-radius:50%;background:#dfe5e7;flex:0 0 auto;position:relative;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .vn .av{width:30px;height:30px;border-radius:50%;background:#dfe5e7;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:13px}
   .vn .play{width:27px;height:27px;border-radius:50%;background:var(--wa-teal);color:#fff;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:none}
   .vn .mid{flex:1}.vn .track2{position:relative;height:3px;background:#cfd6d9;border-radius:2px;margin:7px 0}
   .vn .knob{position:absolute;top:50%;left:18%;width:8px;height:8px;border-radius:50%;background:var(--wa-teal);transform:translate(-50%,-50%)}
@@ -156,16 +158,6 @@
   .tray .choice .ic{min-width:15px}
   .tray .choice small{display:block;color:#8aa0aa;font-weight:400;font-size:10.5px;font-style:italic;margin-top:1px}
 
-  footer.banner{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);color:#6f8088;font-size:10.8px;line-height:1.5;padding:8px 16px}
-  footer.banner b{color:#4a5b62}
-
-  .zoom{position:fixed;inset:0;background:rgba(238,242,243,.97);z-index:100;display:none;flex-direction:column;padding:18px}
-  .zoom.show{display:flex}
-  .zoom .zbar{display:flex;justify-content:space-between;align-items:center;color:#27424b;margin-bottom:10px}
-  .zoom .zbar b{font-size:16px;color:var(--teal)}
-  .zoom .zclose{background:#eef3f3;color:#3c545b;border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;font-size:13px}
-  .zoom .zbody{flex:1;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
-
   /* ============ MOBILE (≤640px) ============ */
   .mtabs{display:none}
   @media(max-width:640px){
@@ -183,19 +175,10 @@
     .screen{border-radius:0;height:100%}
     .notch{display:none}
     header.bar{padding-top:12px}
-    .journey{flex:1;min-width:0;border:none;border-radius:0;box-shadow:none;padding:12px 13px 0}
-    .journey h1{font-size:20px}
-    .jhead .sub{white-space:normal}
-    .jflow{overflow-x:hidden}
-    .track{flex-direction:column;align-items:stretch;min-width:0}
-    .track::before{display:none}
-    .col{width:100%;padding-top:4px}
-    .col .dot{display:none}
-    .conn{width:100%;height:20px;margin:1px 0;align-self:stretch;justify-content:center}
-    .conn .arw{transform:rotate(90deg);line-height:20px}
-    .conn .clbl{position:static;text-align:center;display:block}
-    body.tab-demo footer.banner{display:none}
-    footer.banner{font-size:10px;padding:8px 12px}
+    .journey{flex:1;min-width:0;border:none;border-radius:0;box-shadow:none;padding:12px 13px;overflow-y:auto}
+    .jhead .h1{font-size:20px}
+    .jflow{overflow-x:auto;max-height:none}
+    .specgrid{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -204,28 +187,33 @@
     <span class="mtitle">Poshan Saathi</span>
     <div class="mtabbtns">
       <button class="mtab active" data-tab="demo" onclick="setMobileTab('demo')">▶ Demo</button>
-      <button class="mtab" data-tab="journey" onclick="setMobileTab('journey')">🗺 Journey</button>
+      <button class="mtab" data-tab="journey" onclick="setMobileTab('journey')">🗺 Journey + Spec</button>
     </div>
   </div>
   <div class="wrap">
-    <!-- LEFT: adaptive journey -->
+    <!-- LEFT: journey + product requirements -->
     <section class="journey">
       <div class="jhead">
-        <div>
-          <h1>Poshan Saathi — conversation journey</h1>
-          <div class="sub">Hover to trace a path · <b>click any step to play the demo from there</b> · <b style="color:#c8552f;font-weight:600">amber</b> = live position.</div>
-        </div>
-        <button class="zoombtn" onclick="openZoom()">⤢ Expand</button>
+        <div class="h1">Poshan Saathi — for the TB patient</div>
+        <div class="sub">A WhatsApp bot that teaches good TB nutrition, then helps the patient log food and hit daily calorie &amp; protein targets. Hover a step to trace it · <b>click any step to play the demo from there</b> · <b style="color:#c8552f">amber</b> = live position.</div>
       </div>
+
+      <div class="sectlabel">Conversation journey</div>
       <div class="legend2">
+        <span><i style="background:#3f6f8f"></i>NUTRITION BASICS</span>
         <span><i style="background:#2f6b4a"></i>BOT MESSAGE</span>
         <span><i style="background:#b07d2b"></i>NUTRITION CHECK</span>
         <span><i style="background:#c8552f"></i>CLARIFY / BOOST LOOP</span>
         <span><i style="background:#2f6b4a"></i>REWARD</span>
-        <span><i style="background:#a8a296"></i>SYSTEM</span>
       </div>
       <div class="themestrip" id="themestrip"></div>
       <div class="jflow" id="journeyHost"></div>
+
+      <div class="specs">
+        <div class="sectlabel">Product requirements &amp; build spec</div>
+        <div class="ssub">What it takes to build this for a real TB-treatment program.</div>
+        <div class="specgrid" id="specGrid"></div>
+      </div>
     </section>
 
     <!-- RIGHT: WhatsApp bot -->
@@ -248,45 +236,63 @@
     </div>
   </div>
 
-  <footer class="banner">
-    <b>Poshan Saathi</b> — clickable mock-up of a TB-nutrition WhatsApp bot (right). The patient <b>types or sends a voice note</b> of what they ate ("2 roti, dal, rice"); the bot looks up calories &amp; protein, tracks the running daily total, and nudges toward the targets a TB patient needs to recover. The left panel is the adaptive conversation journey, with its clarification and protein-boost branches. <b>Real vs simulated:</b> the food parsing, nutrition values and progress are a front-end mock, not a live model or WhatsApp connection; voice notes are placeholders. Targets — <b>2000 kcal · 50 g protein/day</b> — are illustrative of adult-TB / Ni-kshay nutrition guidance; a real patient's targets are set by their doctor or dietitian. Built on the ASHA Saathi / HealthBI demo language and interaction patterns.
-  </footer>
-
-  <div class="zoom" id="zoom">
-    <div class="zbar"><b>Conversation journey — full view</b><button class="zclose" onclick="closeZoom()">✕ Close</button></div>
-    <div class="zbody" id="zoomBody"></div>
-  </div>
-
 <script>
-/* ============ JOURNEY ============ */
-const THEMES=[['t1','Log a meal (by text)',true],['t2','End-of-day review',false],['t3','Weekly report to ASHA',false],['t4','Low-cost meal ideas',false]];
+/* ============ JOURNEY DATA ============ */
+const THEMES=[['t0','1 · Nutrition basics',true],['t1','2 · Log a meal',false],['t2','3 · End-of-day review',false],['t3','4 · Weekly report · later',false]];
 const ENTRYSTEPS=[
- {id:'trigger',type:'sys',title:'Meal reminder',syn:'A daily push at meal times — "tell me what you ate" — with how much of today’s target is still left.'},
- {id:'open',type:'sys',title:'Choose what to do',syn:'The patient picks an action by replying; the flow then splits by task.'},
+ {id:'trigger',type:'sys',title:'Welcome / reminder',syn:'A first-time welcome, then a daily meal-time nudge — "tell me what you ate" — for the patient.'},
+];
+const EDUSTEPS=[
+ {id:'edu_intro',type:'edu',title:'Why nutrition matters',syn:'Opens by explaining that, in TB, eating well is as important as the medicine — recovery and strength depend on it.'},
+ {id:'edu_plate',type:'edu',title:'The recovery plate',syn:'A simple visual of what a TB patient’s plate should look like — energy + protein + vegetables + milk.'},
+ {id:'edu_targets',type:'edu',title:'Your daily targets',syn:'Introduces the two numbers to aim for each day — ~2000 kcal and 50 g protein — and why protein is prioritised.'},
+ {id:'edu_foods',type:'edu',title:'Cheap protein foods',syn:'A visual of affordable, local high-protein foods (eggs, dal, milk, paneer, sattu, peanuts) with their protein.'},
 ];
 const F1STEPS=[
- {id:'cap',type:'content',title:'Tell the bot what you ate',syn:'The patient types — or sends a voice note — listing the meal in plain words. No photo, no counting, near-zero data.'},
+ {id:'cap',type:'content',title:'Tell the bot what you ate',syn:'The patient types — or sends a voice note — listing the meal in plain words. No photo, near-zero data.'},
  {id:'rec',type:'content',title:'Bot reads the meal',syn:'It parses the message into food items (roti, dal, rice, paneer…) with assumed standard portions.'},
- {id:'confirm',type:'q',title:'Confirm the items',syn:'"Did I read this right, and are the portions about right?" Correct: yes. The patient can correct an item or portion.',
-   rem:{id:'rfix',title:'Clarification loop',syn:'If the bot misreads or assumes a wrong portion, the patient says so. The bot shows what it understood and lets them edit an item or set "how many", then re-totals — it never silently guesses, so the log reflects what was actually eaten.'},corr:true},
+ {id:'confirm',type:'q',title:'Confirm the items',syn:'"Did I read this right, and are the portions about right?" The patient can correct an item or portion.',
+   rem:{id:'rfix',title:'Clarification loop',syn:'If the bot misreads or assumes a wrong portion, the patient says so. It shows what it understood and lets them edit an item or set "how many", then re-totals — so the log reflects what was actually eaten.'},corr:true},
  {id:'breakdown',type:'content',title:'Nutrition breakdown',syn:'Per-item calories and protein, then the meal total — the core value the patient came for.'},
  {id:'progress',type:'content',title:'Daily progress so far',syn:'A progress card (sent as a message — WhatsApp has no dashboard) shows calories and protein vs today’s targets.'},
  {id:'gap',type:'q',title:'Protein-gap check',syn:'Patient is short on protein. "Which is the best protein booster?" Correct: milk + eggs.',
-   rem:{id:'rgap',title:'Protein-boost loop',syn:'A wrong pick is named first, then escalates: Tier 1 — short why-protein-matters note. Tier 2 — a protein-per-food chart (egg, dal, milk, paneer, sattu). Tier 3 — bundles the key foods into one low-cost suggestion and flags the ASHA/dietitian, then reveals the best answer.'},corr:true},
+   rem:{id:'rgap',title:'Protein-boost loop',syn:'A wrong pick is named first, then escalates: Tier 1 — short why-protein note. Tier 2 — a protein-per-food chart. Tier 3 — bundles a low-cost suggestion and flags the ASHA/dietitian, then reveals the best answer.'},corr:true},
  {id:'reward',type:'reward',title:'Meal logged',syn:'Streak + a star, delivered as a chat message. The day’s running total is saved.'},
  {id:'sched',type:'sys',title:'Next-meal reminder',syn:'Schedules the next nudge and shows what’s still left to hit today’s targets.'},
 ];
 const F2STEPS=[
  {id:'d_open',type:'content',title:'End-of-day summary',syn:'Evening recap — total calories and protein for the day against the targets.'},
  {id:'d_q',type:'q',title:'Close the gap?',syn:'Short on both. "What should you do this evening?" Correct: a protein-rich snack.',
-   rem:{id:'d_rem',title:'Remediation loop',syn:'"Skip it" or "I’ll eat less tomorrow" is named gently first, then: why under-eating slows TB recovery → a cheap protein-dense snack idea → if still unsure, offers to loop in the ASHA, then reveals the answer.'},corr:true},
+   rem:{id:'d_rem',title:'Remediation loop',syn:'"Skip it" / "I’ll eat less tomorrow" is named gently first, then: why under-eating slows TB recovery → a cheap snack idea → offer to loop in the ASHA, then reveal the answer.'},corr:true},
  {id:'d_suggest',type:'content',title:'Suggested snack',syn:'A low-cost, locally available snack (sattu drink + peanuts) sized to close the calorie and protein gap.'},
  {id:'d_log',type:'content',title:'Log the snack',syn:'The patient confirms; the progress card completes and both targets are met for the day.'},
- {id:'d_share',type:'sys',title:'Share with ASHA',syn:'Weekly adherence can be shared with the ASHA / health worker — with a clear consent + governance note.',note:'⚑ Sharing is opt-in. Nutrition data informs support; it is never used punitively or to affect benefit eligibility.'},
+ {id:'d_share',type:'sys',title:'Share with ASHA',syn:'Weekly adherence can be shared with the ASHA — opt-in, with a clear consent + governance note.'},
  {id:'d_reward',type:'reward',title:'Targets met',syn:'Both targets hit — a badge and the day’s streak, framed around recovery.'},
  {id:'d_sched',type:'sys',title:'Tomorrow’s plan',syn:'Sets tomorrow’s reminders and carries the streak forward.'},
 ];
-const TYPELBL={sys:'System',content:'Bot',q:'Nutrition check',msg:'Key message',reward:'Reward'};
+const TYPELBL={sys:'System',content:'Bot',q:'Nutrition check',edu:'Nutrition basics',reward:'Reward'};
+
+/* ============ PRODUCT REQUIREMENTS ============ */
+const SPECS=[
+ {ac:'#3f6f8f',e:'Who it’s for',t:'The TB patient — not a health worker',d:'Patient-operated, on their own phone, often low-end with little data. Multilingual, voice-friendly. The ASHA is a support contact, not the user.'},
+ {ac:'#2f6b4a',e:'Core job',t:'Hit a daily calorie & protein target',d:'Help the patient reach the targets their clinician sets — by logging food in plain words and seeing exactly where they stand each day.'},
+ {ac:'#3f6f8f',e:'Education first',t:'Teach before tracking',d:'A short onboarding lesson: the TB recovery plate, why protein & calories matter, and cheap local foods — with simple visuals, repeatable any time.'},
+ {ac:'#b07d2b',e:'Nutrition engine',t:'Targets + food table',d:'Defaults ~2000 kcal / 50 g protein, clinician-adjustable per patient. Indian food table with per-roti / per-katori values. Protein prioritised in every nudge.'},
+ {ac:'#2f6b4a',e:'Input',t:'Text or voice, no photo',d:'Free text or a voice note in the patient’s language. Standard portions assumed with one-tap correction. The patient never counts calories themselves.'},
+ {ac:'#c8552f',e:'Coaching',t:'Tiered help + escalation',d:'When a patient is short or unsure, help escalates gently; persistent gaps route to the ASHA / dietitian. Encouraging tone, never punitive.'},
+ {ac:'#b07d2b',e:'Engagement',t:'Reminders, streaks, badges',d:'Meal-time nudges, an end-of-day gap check, and streaks/badges to sustain daily logging across the full treatment course.'},
+ {ac:'#3f6f8f',e:'Data & privacy',t:'Opt-in, never punitive',d:'Sharing with the ASHA is opt-in. Nutrition data supports care only — never used for benefit eligibility or judgement. End-to-end encrypted.'},
+ {ac:'#2f6b4a',e:'Integrations',t:'Ni-kshay + language packs',d:'Link to the Ni-kshay patient ID; regional-language content packs; an ASHA/dietitian view in a later phase.'},
+ {ac:'#7a756b',e:'Delivery & phasing',t:'Phase 1 → Phase 2',d:'P1: WhatsApp text log + targets + education. P2: voice parsing, AI Q&A on diet, clinician dashboard.',phase:'both'},
+];
+function buildSpecs(){
+  document.getElementById('specGrid').innerHTML=SPECS.map(s=>{
+    let ph='';
+    if(s.phase==='both') ph='<span class="ph p1">PHASE 1</span> <span class="ph p2">PHASE 2</span>';
+    return `<div class="spec" style="--ac:${s.ac}"><div class="se">${s.e}</div><div class="st">${s.t}</div><div class="sd">${s.d}</div>${ph}</div>`;
+  }).join('');
+}
+
 function trackHTML(steps){
   let html='<div class="track">';
   steps.forEach((s,i)=>{
@@ -299,7 +305,6 @@ function trackHTML(steps){
       html+=`<div class="branchlbl">✗ IF WRONG ↓</div>
         <div class="rem" id="${s.rem.id}"><div class="stype">Remediation</div><div class="stitle">${s.rem.title}</div><div class="ssyn">${s.rem.syn}</div><div class="retry">↺ BACK TO THE CHECK — RETRY</div></div>`;
     }
-    if(s.note){ html+=`<div class="stnote">${s.note}</div>`; }
     html+='</div>';
     if(next){
       const lbl=s.corr?'<span class="clbl">if correct →</span>':'';
@@ -311,10 +316,10 @@ function trackHTML(steps){
 function buildJourney(){
   document.getElementById('themestrip').innerHTML=THEMES.map(t=>`<span class="chip${t[2]?' on':''}">${t[1]}</span>`).join('');
   document.getElementById('journeyHost').innerHTML=
-    '<div class="lessonblock" data-lesson="entry"><div class="tracklabel">Shared entry — every day starts here</div>'+trackHTML(ENTRYSTEPS)+'</div>'+
-    '<div class="branchnote">↓ The patient replies with a task, and the flow splits below</div>'+
-    '<div class="lessonblock" data-lesson="l1"><div class="tracklabel l2">Task 1 · Log a meal by text / voice</div>'+trackHTML(F1STEPS)+'</div>'+
-    '<div class="lessonblock" data-lesson="l2"><div class="tracklabel l2">Task 2 · End-of-day review &amp; closing the gap</div>'+trackHTML(F2STEPS)+'</div>';
+    '<div class="lessonblock" data-lesson="entry"><div class="tracklabel">Entry — the patient opens WhatsApp</div>'+trackHTML(ENTRYSTEPS)+'</div>'+
+    '<div class="lessonblock" data-lesson="edu"><div class="tracklabel l2">Step 1 · Nutrition basics (shown first-time, repeatable)</div>'+trackHTML(EDUSTEPS)+'</div>'+
+    '<div class="lessonblock" data-lesson="l1"><div class="tracklabel l2">Step 2 · Log a meal by text / voice</div>'+trackHTML(F1STEPS)+'</div>'+
+    '<div class="lessonblock" data-lesson="l2"><div class="tracklabel l2">Step 3 · End-of-day review &amp; closing the gap</div>'+trackHTML(F2STEPS)+'</div>';
 }
 let pinned=null;
 function applyHL(id){
@@ -336,17 +341,14 @@ function stage(id){
   document.querySelectorAll('#journeyHost .col').forEach(c=>c.classList.remove('active','rem-on'));
   const el=document.getElementById(id);
   const col=el?el.closest('.col'):document.getElementById('col_'+id);
-  const lesson = id.indexOf('d_')===0 ? 'l2' : (id==='trigger'||id==='open' ? 'entry' : 'l1');
+  const lesson = id.indexOf('d_')===0 ? 'l2' : (id.indexOf('edu_')===0 ? 'edu' : (id==='trigger' ? 'entry' : 'l1'));
   document.querySelectorAll('#journeyHost .lessonblock').forEach(b=>{
     b.classList.remove('peek');
-    const isOther = (lesson==='entry') ? (b.dataset.lesson!=='entry') : (b.dataset.lesson!==lesson);
-    b.classList.toggle('dim', isOther);
+    b.classList.toggle('dim', b.dataset.lesson!==lesson);
   });
   if(col){col.classList.add('active'); if(el&&el.classList.contains('rem'))col.classList.add('rem-on');
-    try{col.scrollIntoView({behavior:'smooth',inline:'center',block:'center'});}catch(e){}}
+    try{col.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}catch(e){}}
 }
-function openZoom(){document.getElementById('zoomBody').innerHTML=document.getElementById('journeyHost').innerHTML;document.getElementById('zoom').classList.add('show');}
-function closeZoom(){document.getElementById('zoom').classList.remove('show');}
 
 /* ============ DEMO ENGINE ============ */
 const CAL_TGT=2000, PROT_TGT=50;
@@ -363,10 +365,44 @@ function bubble(html,dir='in',en='',cls=''){const row=document.createElement('di
   b.innerHTML=inner;row.appendChild(b);chat.appendChild(row);scrollC();return b;}
 function starMsg(msg,en){streak++;bubble('🌟 '+msg+' Aapko ek star mila ⭐  <b>(streak: '+streak+' din 🔥)</b>','in',en,'reward');}
 function voiceNote(tag,secs){const id='vn'+Math.random().toString(36).slice(2,6);
-  const html=`<div class="vn"><button class="play" id="${id}b">▶</button><div class="mid"><div class="track2"><div class="knob"></div></div><div class="meta"><span>0:${String(secs).padStart(2,'0')}</span><span>${tag}</span></div></div><div class="av">🙋‍♀️<span>🎙️</span></div></div>`;
+  const html=`<div class="vn"><button class="play" id="${id}b">▶</button><div class="mid"><div class="track2"><div class="knob"></div></div><div class="meta"><span>0:${String(secs).padStart(2,'0')}</span><span>${tag}</span></div></div><div class="av">🙋‍♀️</div></div>`;
   const b=bubble(html,'out');const btn=b.querySelector('#'+id+'b');btn.onclick=()=>{btn.textContent=btn.textContent==='▶'?'❚❚':'▶';};return b;}
 
-/* nutrition breakdown card */
+/* ---- education visuals (SVG, sent as chat images) ---- */
+function eduImageBubble(svg,cap,en){const row=document.createElement('div');row.className='row in';const b=document.createElement('div');b.className='bubble imgcard';
+  b.innerHTML=svg+'<div class="cap">'+(cap||'')+(en?'<span class="en">'+en+'</span>':'')+'<span class="t">'+now()+'</span></div>';
+  row.appendChild(b);chat.appendChild(row);scrollC();}
+function recoveryPlate(){
+  const svg=`<svg class="eduimg" viewBox="0 0 300 224" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="224" fill="#fbf6ec"/>
+    <text x="150" y="22" font-size="13" fill="#176039" text-anchor="middle" font-weight="bold">TB recovery thali · har khaane mein</text>
+    <circle cx="120" cy="124" r="84" fill="#ffffff" stroke="#e0d8c4" stroke-width="3"/>
+    <circle cx="120" cy="124" r="84" fill="none" stroke="#ece3d0" stroke-width="1"/>
+    <line x1="120" y1="40" x2="120" y2="208" stroke="#e6ddca" stroke-width="2"/>
+    <line x1="36" y1="124" x2="204" y2="124" stroke="#e6ddca" stroke-width="2"/>
+    <text x="80" y="86" font-size="20" text-anchor="middle">🫓🍚</text>
+    <text x="80" y="104" font-size="8.5" fill="#7a6f57" text-anchor="middle" font-weight="bold">Anaj — energy</text>
+    <text x="160" y="86" font-size="20" text-anchor="middle">🥚🥣</text>
+    <text x="160" y="104" font-size="8.5" fill="#2f6b4a" text-anchor="middle" font-weight="bold">Protein — dal/ande</text>
+    <text x="80" y="156" font-size="20" text-anchor="middle">🥦🥗</text>
+    <text x="80" y="174" font-size="8.5" fill="#5c8a3a" text-anchor="middle" font-weight="bold">Sabzi</text>
+    <text x="160" y="156" font-size="20" text-anchor="middle">🧀🫛</text>
+    <text x="160" y="174" font-size="8.5" fill="#2f6b4a" text-anchor="middle" font-weight="bold">Paneer/soya</text>
+    <text x="258" y="96" font-size="26" text-anchor="middle">🥛</text>
+    <text x="258" y="150" font-size="24" text-anchor="middle">🍌</text>
+    <text x="258" y="178" font-size="8.5" fill="#7a6f57" text-anchor="middle" font-weight="bold">+ doodh<tspan x="258" dy="11">&amp; phal</tspan></text>
+  </svg>`;
+  eduImageBubble(svg,'Aadhi thali protein + sabzi, baaki anaj','Half the plate protein + vegetables, the rest grains — plus milk and a fruit.');
+}
+function proteinFoodsImage(){
+  const foods=[['🥚','2 ande','12g'],['🥤','Sattu (1 glass)','12g'],['🥣','Dal (1 katori)','9g'],['🧀','Paneer (50g)','9g'],['🥛','Doodh (1 glass)','8g'],['🥜','Moongphali (mutthi)','7g']];
+  const cells=foods.map((f,i)=>{const c=i%2,r=Math.floor(i/2);const x=10+c*145,y=40+r*56;
+    return `<g transform="translate(${x},${y})"><rect width="135" height="48" rx="8" fill="#ffffff" stroke="#e7e2d8"/><text x="14" y="31" font-size="22">${f[0]}</text><text x="44" y="22" font-size="10.5" fill="#3a372f" font-weight="bold">${f[1]}</text><text x="44" y="37" font-size="11" fill="#2f6b4a" font-weight="bold">${f[2]} protein</text></g>`}).join('');
+  const svg=`<svg class="eduimg" viewBox="0 0 300 228" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="228" fill="#fbf6ec"/>
+    <text x="150" y="24" font-size="13" fill="#176039" text-anchor="middle" font-weight="bold">Protein ke liye sasta khaana 💪</text>${cells}</svg>`;
+  eduImageBubble(svg,'Roz in mein se kuch zaroor lein','Affordable, local, high-protein foods — include some every day.');
+}
+
 function nutriCard(rows,totCal,totProt){
   const body=rows.map(r=>`<tr><td class="it">${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]} g</td></tr>`).join('');
   const html=`<div class="nutri"><div class="nh"><span>Nutrition breakdown</span><span class="scan">✓ read</span></div>
@@ -377,8 +413,6 @@ function nutriCard(rows,totCal,totProt){
   const row=document.createElement('div');row.className='row in';const b=document.createElement('div');b.className='bubble';b.style.maxWidth='90%';
   b.innerHTML=html+'<span class="t">'+now()+'</span>';row.appendChild(b);chat.appendChild(row);scrollC();
 }
-
-/* daily progress card (sent as a message) */
 function progCard(){
   const cp=Math.min(100,Math.round(calNow/CAL_TGT*100)), pp=Math.min(100,Math.round(protNow/PROT_TGT*100));
   const both=(calNow>=CAL_TGT&&protNow>=PROT_TGT);
@@ -391,8 +425,6 @@ function progCard(){
   b.innerHTML=html+'<span class="t">'+now()+'</span>';row.appendChild(b);chat.appendChild(row);scrollC();
   const fills=b.querySelectorAll('.fill');setTimeout(()=>{fills[0].style.width=cp+'%';fills[1].style.width=pp+'%';},60);
 }
-
-/* protein-per-food chart (used in the boost remediation) */
 function proteinChart(){
   const foods=[['🥚 2 eggs',12],['🥤 Sattu (1 glass)',12],['🥣 Dal (1 katori)',9],['🧀 Paneer (50g)',9],['🥛 Milk (1 glass)',8]];
   const max=12;
@@ -415,21 +447,37 @@ function seq(steps,done){let i=0;(function nxt(){if(i>=steps.length){done&&done(
 
 function restart(){chat.innerHTML='';clearChoices();streak=0;score=0;wrong1=0;wrong2=0;setTotals(0,0);buildJourney();start();}
 
-/* ---- ENTRY ---- */
+/* ---- ENTRY + EDUCATION ---- */
 function start(){stage('trigger');setTotals(0,0);day('TODAY · Sunita');sysM('🔒 Messages are end-to-end encrypted. Your meals are private.');
   seq([
-    {wait:500,run:()=>bubble('Namaste Sunita ji 🌞 Dophar ho gayi — aaj kya khaaya, bata dein?','in','Good afternoon, Sunita. It’s midday — tell me what you ate?')},
-    {wait:850,run:()=>bubble('TB se theek hone ke liye aaj ka lakshya: <b>2000 calorie</b> aur <b>50g protein</b>. Abhi tak: 0 / 0. Neeche se chunein 👇','in','Your target for TB recovery today: 2000 kcal and 50g protein. So far: 0 / 0. Choose below.')},
-  ],openTracker);}
-function openTracker(){stage('open');
-  showChoices([
-    {num:'1.',label:'Khaana likhein / bolein',sub:'Log a meal by text or voice',echo:'Log a meal',go:mealCapture},
-    {num:'2.',label:'Aaj ka hisaab dekhein',sub:'End-of-day review',echo:'End-of-day review',go:dayOpen},
-    {num:'3.',label:'Hafte ki report — ASHA ko',sub:'Weekly report · coming soon',echo:'Weekly report',go:soon},
-  ],'Aap kya karna chahti hain?');}
-function soon(){bubble('Ye hissa abhi demo mein nahi hai — "khaana likhein" khol rahe hain.','in','That isn’t in this demo yet — opening "log a meal".');setTimeout(mealCapture,850);}
+    {wait:500,run:()=>bubble('Namaste Sunita ji 🌞 Main <b>Poshan Saathi</b> hoon. TB ke ilaaj ke dauraan main aapko sahi khaane mein madad karungi.','in','Hi Sunita. I’m Poshan Saathi. I’ll help you eat well during your TB treatment.')},
+    {wait:800,run:()=>bubble('Pehli baar mil rahe hain — to chaliye 2 minute mein samjhte hain ki TB mein kya khaana chahiye. 👇','in','Since it’s our first time — let’s take 2 minutes to understand what to eat during TB.')},
+  ],()=>showChoices([{ic:'▶',label:'Haan, shuru karein',sub:'Yes, start the basics',echo:'Shuru karein',go:eduIntro}],'Tap to begin'));}
+function eduIntro(){stage('edu_intro');
+  seq([
+    {wait:600,run:()=>bubble('TB se theek hone mein <b>sahi khaana dawa jitna hi zaroori</b> hai 💪. Achha khaana sharir ko TB se ladne aur kamzori se ubarne mein madad karta hai.','in','In TB, eating well is as important as the medicine — it helps your body fight the disease and recover strength.')},
+  ],eduPlate);}
+function eduPlate(){stage('edu_plate');
+  seq([
+    {wait:650,run:()=>bubble('Aapki har thali aisi honi chahiye 👇','in','This is what each of your plates should look like:')},
+    {wait:600,run:recoveryPlate},
+  ],eduTargets);}
+function eduTargets(){stage('edu_targets');
+  seq([
+    {wait:700,run:()=>bubble('Har din do cheezon ka lakshya rakhein: <b>~2000 calorie</b> (taakat ke liye) aur <b>50 gram protein</b> (sharir banane ke liye).','in','Aim for two things daily: ~2000 kcal (energy) and 50 g protein (to rebuild the body).')},
+    {wait:750,run:()=>bubble('Inme se <b>protein sabse zaroori</b> hai — isiliye main har baar protein par dhyaan dilaungi. (Ye lakshya aapke doctor ke hisaab se badal sakta hai.)','in','Protein matters most — so I’ll keep nudging you on it. Your doctor may adjust these targets for you.')},
+  ],eduFoods);}
+function eduFoods(){stage('edu_foods');
+  seq([
+    {wait:650,run:()=>bubble('Protein ke liye ye saste, aaspaas milne wale khaane sabse achhe hain 👇','in','For protein, these affordable, local foods are best:')},
+    {wait:600,run:proteinFoodsImage},
+    {wait:700,run:()=>bubble('<b class="h">Yaad rakhein · remember</b><ol><li>🍽️ Har thali mein kuch protein zaroor</li><li>🥚 Ande, dal, doodh — roz</li><li>🚫 Bhookhe na rahein, chhota-chhota khaate rahein</li></ol>','in','Some protein in every plate · eggs, dal, milk daily · don’t skip meals — eat small and often.','summary')},
+  ],()=>showChoices([
+      {ic:'✅',label:'Samajh gaya — ab aaj ka khaana log karein',sub:'Got it — log today’s meal',echo:'Samajh gaya, khaana log karein',go:mealCapture},
+      {ic:'🔁',label:'Basics phir se dekhein',sub:'See the basics again',echo:'Phir se',go:eduIntro},
+    ],'Tap to continue'));}
 
-/* ---- FLOW 1: log a meal by text/voice ---- */
+/* ---- LOG A MEAL ---- */
 function mealCapture(){stage('cap');score=0;wrong1=0;wrong2=0;
   seq([
     {wait:600,run:()=>bubble('Bas likh dein ya voice note bhej dein — jaise "2 roti, dal, chawal". Kuch ginne ki zaroorat nahi 🙂','in','Just type it, or send a voice note — like "2 roti, dal, rice". No need to count anything.')},
@@ -467,7 +515,7 @@ function mealProgress(){stage('progress');setTotals(820,38);
   ],proteinGapQ);}
 function proteinGapQ(){stage('gap');
   seq([
-    {wait:700,run:()=>bubble('Calorie achhi chal rahi hai. Protein <b>38/50g</b> — bas thoda peeche. TB se theek hone ke liye protein sabse zaroori hai 💪','in','Calories look good. Protein is 38/50g — just a little behind. Protein matters most for TB recovery.')},
+    {wait:700,run:()=>bubble('Calorie achhi chal rahi hai. Protein <b>38/50g</b> — bas thoda peeche. Yaad hai, protein sabse zaroori hai 💪','in','Calories look good. Protein is 38/50g — just a little behind. Remember, protein matters most.')},
     {wait:750,run:()=>bubble('<b>Sabse achha protein booster kaunsa hai?</b>','in','Which is the best protein booster?')},
   ],()=>{
     showChoices([
@@ -512,11 +560,11 @@ function mealReward(){stage('reward');
 function mealSched(){stage('sched');
   seq([{wait:650,run:()=>bubble('Raat ke khaane ka reminder <b>shaam 8 baje</b> bhej dungi. Protein ho gaya 💪 — calorie abhi bhi <b>~890 kcal</b> baaki hai.','in','I’ll remind you for dinner at 8pm. Protein’s done — you still have ~890 kcal to go today.')}],()=>{
     showChoices([
-      {num:'2.',label:'Aaj ka hisaab dekhein',sub:'End-of-day review',echo:'End-of-day review',go:dayOpen},
+      {num:'1.',label:'Aaj ka hisaab dekhein',sub:'End-of-day review',echo:'End-of-day review',go:dayOpen},
       {ic:'↺',label:'Demo dobara chalayein',sub:'Restart',echo:false,go:restart},
     ],'Aage kya karein');});}
 
-/* ---- FLOW 2: end-of-day review ---- */
+/* ---- END-OF-DAY REVIEW ---- */
 function dayOpen(){stage('d_open');setTotals(1750,42);wrong1=0;wrong2=0;
   seq([
     {wait:650,run:()=>bubble('🌙 Din ka hisaab. Aaj aapne 3 baar khaana log kiya 👇','in','End of day. You logged 3 meals today:')},
@@ -574,13 +622,14 @@ function daySched(){stage('d_sched');
   seq([{wait:650,run:()=>bubble('Kal subah <b>8 baje</b> nashte ka reminder bhej dungi. Streak: 8 din 🔥 Shabaash!','in','I’ll remind you for breakfast at 8am tomorrow. Streak: 8 days. Well done!')}],closeOut);}
 function closeOut(){
   showChoices([
-    {ic:'≡',label:'Shuru se dekhein',sub:'Back to the start',echo:'Menu',go:()=>{bubble('Theek hai.','in');setTimeout(openTracker,450);}},
+    {ic:'📚',label:'Nutrition basics phir se',sub:'Replay the basics',echo:'Basics',go:()=>{bubble('Theek hai.','in');setTimeout(eduIntro,450);}},
     {ic:'↺',label:'Demo dobara chalayein',sub:'Restart the demo',echo:false,go:restart},
   ],'Aage kya karein');}
 
 /* ---- click a journey step to play from there ---- */
 const JUMP={
-  trigger:start, open:openTracker,
+  trigger:start,
+  edu_intro:eduIntro, edu_plate:eduPlate, edu_targets:eduTargets, edu_foods:eduFoods,
   cap:mealCapture, rec:function(){bubble('2 roti, dal, chawal, paneer sabzi, thoda salad','out');setTimeout(mealRead,300);},
   confirm:mealConfirm, rfix:function(){mealFix();},
   breakdown:mealBreakdown, progress:function(){setTotals(820,38);mealProgress();},
@@ -602,6 +651,7 @@ function jumpTo(id){
   sysM('▶ Demo started from this step (clicked in the journey)');
   JUMP[id]();
 }
+buildSpecs();
 buildJourney();
 start();
 </script>
