@@ -33,7 +33,7 @@
   .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:#867f73;background:transparent;border:1px solid var(--line);border-radius:4px;padding:5px 11px}
   .chip.on{color:#2f6b4a;background:#eaf2ec;border-color:#bcdcc8;font-weight:700}
 
-  .jflow{flex:0 0 auto;max-height:38vh;overflow:auto;padding:6px 4px 12px}
+  .jflow{flex:1 1 auto;min-height:0;overflow:auto;padding:6px 4px 12px}
   .branchnote{font-family:var(--mono);font-size:10px;color:#3aa088;margin:8px 0 2px;letter-spacing:.02em}
   .lessonblock{transition:opacity .25s}
   .lessonblock.dim{opacity:.4}
@@ -69,16 +69,23 @@
   .stage.hl{opacity:1;box-shadow:0 0 0 2px var(--teal);transform:translateY(-2px)}
   .rem.hl{opacity:1;box-shadow:0 0 0 2px var(--c-rem)}
 
-  /* product requirements / build spec */
-  .specs{flex:1 1 auto;min-height:0;overflow-y:auto;border-top:1px solid var(--line);margin-top:8px;padding-top:12px}
-  .specs .ssub{font-size:11.5px;color:var(--muted);margin:2px 0 10px}
-  .specgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-  .spec{background:#fff;border:1px solid var(--line);border-left:3px solid var(--ac,#2f6b4a);border-radius:8px;padding:9px 11px}
-  .spec .se{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ac,#2f6b4a);font-weight:700;margin-bottom:3px}
-  .spec .st{font-size:12px;font-weight:700;color:#2a2722;margin-bottom:3px;line-height:1.25}
-  .spec .sd{font-size:11px;color:#6f6a60;line-height:1.46}
-  .spec .ph{display:inline-block;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.04em;border-radius:9px;padding:1px 6px;margin-top:6px}
-  .spec .ph.p1{background:#e7f1ea;color:#2f6b4a} .spec .ph.p2{background:#eef1f5;color:#3f6f8f}
+  /* left sub-nav: Journey | Build spec */
+  .leftnav{display:flex;gap:6px;margin:10px 0 8px;flex:0 0 auto}
+  .lnav{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;padding:7px 13px;border:1px solid var(--line);background:#f3f1ea;color:#5d6b62;border-radius:8px;cursor:pointer;font-weight:700}
+  .lnav.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+  .view{flex:1 1 auto;min-height:0;display:none;flex-direction:column}
+  .view.on{display:flex}
+  /* product requirements / build spec — line items, not cards */
+  .specsview{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:4px}
+  .specsview .ssub{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.5}
+  .speclist{display:flex;flex-direction:column}
+  .specline{padding:11px 0;border-bottom:1px solid var(--line);font-size:12.5px;line-height:1.55;color:#4a463e}
+  .specline:first-child{padding-top:2px}
+  .specline:last-child{border-bottom:none}
+  .specline .se{font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--ac,#2f6b4a);font-weight:700;display:block;margin-bottom:3px}
+  .specline b{color:#26241f}
+  .specline .ph{display:inline-block;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.04em;border-radius:9px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+  .specline .ph.p1{background:#e7f1ea;color:#2f6b4a} .specline .ph.p2{background:#eef1f5;color:#3f6f8f}
 
   /* ---------- RIGHT: phone (WhatsApp) ---------- */
   .right{flex:0 0 auto;height:100%;display:flex;align-items:center}
@@ -178,7 +185,8 @@
     .journey{flex:1;min-width:0;border:none;border-radius:0;box-shadow:none;padding:12px 13px;overflow-y:auto}
     .jhead .h1{font-size:20px}
     .jflow{overflow-x:auto;max-height:none}
-    .specgrid{grid-template-columns:1fr}
+    .view.on{display:block}
+    .specsview{overflow:visible}
   }
 </style>
 </head>
@@ -198,21 +206,28 @@
         <div class="sub">A WhatsApp bot that teaches good TB nutrition, then helps the patient log food and hit daily calorie &amp; protein targets. Hover a step to trace it · <b>click any step to play the demo from there</b> · <b style="color:#c8552f">amber</b> = live position.</div>
       </div>
 
-      <div class="sectlabel">Conversation journey</div>
-      <div class="legend2">
-        <span><i style="background:#3f6f8f"></i>NUTRITION BASICS</span>
-        <span><i style="background:#2f6b4a"></i>BOT MESSAGE</span>
-        <span><i style="background:#b07d2b"></i>NUTRITION CHECK</span>
-        <span><i style="background:#c8552f"></i>CLARIFY / BOOST LOOP</span>
-        <span><i style="background:#2f6b4a"></i>REWARD</span>
+      <div class="leftnav">
+        <button class="lnav active" id="navJourney" onclick="setView('journey')">🗺 Conversation journey</button>
+        <button class="lnav" id="navSpec" onclick="setView('spec')">📋 Build spec &amp; requirements</button>
       </div>
-      <div class="themestrip" id="themestrip"></div>
-      <div class="jflow" id="journeyHost"></div>
 
-      <div class="specs">
-        <div class="sectlabel">Product requirements &amp; build spec</div>
-        <div class="ssub">What it takes to build this for a real TB-treatment program.</div>
-        <div class="specgrid" id="specGrid"></div>
+      <div class="view on" id="viewJourney">
+        <div class="legend2">
+          <span><i style="background:#3f6f8f"></i>NUTRITION BASICS</span>
+          <span><i style="background:#2f6b4a"></i>BOT MESSAGE</span>
+          <span><i style="background:#b07d2b"></i>NUTRITION CHECK</span>
+          <span><i style="background:#c8552f"></i>CLARIFY / BOOST LOOP</span>
+          <span><i style="background:#2f6b4a"></i>REWARD</span>
+        </div>
+        <div class="themestrip" id="themestrip"></div>
+        <div class="jflow" id="journeyHost"></div>
+      </div>
+
+      <div class="view" id="viewSpecs">
+        <div class="specsview">
+          <div class="ssub">What it takes to build this for a real TB-treatment program.</div>
+          <div class="speclist" id="specList"></div>
+        </div>
       </div>
     </section>
 
@@ -286,11 +301,17 @@ const SPECS=[
  {ac:'#7a756b',e:'Delivery & phasing',t:'Phase 1 → Phase 2',d:'P1: WhatsApp text log + targets + education. P2: voice parsing, AI Q&A on diet, clinician dashboard.',phase:'both'},
 ];
 function buildSpecs(){
-  document.getElementById('specGrid').innerHTML=SPECS.map(s=>{
+  document.getElementById('specList').innerHTML=SPECS.map(s=>{
     let ph='';
-    if(s.phase==='both') ph='<span class="ph p1">PHASE 1</span> <span class="ph p2">PHASE 2</span>';
-    return `<div class="spec" style="--ac:${s.ac}"><div class="se">${s.e}</div><div class="st">${s.t}</div><div class="sd">${s.d}</div>${ph}</div>`;
+    if(s.phase==='both') ph=' <span class="ph p1">PHASE 1</span><span class="ph p2">PHASE 2</span>';
+    return `<div class="specline" style="--ac:${s.ac}"><span class="se">${s.e}</span><b>${s.t}.</b> ${s.d}${ph}</div>`;
   }).join('');
+}
+function setView(v){
+  document.getElementById('viewJourney').classList.toggle('on',v==='journey');
+  document.getElementById('viewSpecs').classList.toggle('on',v==='spec');
+  document.getElementById('navJourney').classList.toggle('active',v==='journey');
+  document.getElementById('navSpec').classList.toggle('active',v==='spec');
 }
 
 function trackHTML(steps){
