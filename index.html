@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Poshan Saathi — TB Nutrition WhatsApp Bot Demo</title>
+<style>
+  :root{
+    --wa-green:#075E54; --wa-teal:#128C7E; --bubble-in:#ffffff; --bubble-out:#DCF8C6; --chat-bg:#E5DDD5;
+    --cal:#c8552f; --prot:#2f6b4a;
+    --ink:#26241f; --muted:#7a756b; --link:#027eb5;
+    --page:#faf8f2; --card:#ffffff; --line:#e7e2d8; --teal:#2f6b4a; --terra:#c8552f; --amber:#c8552f;
+    --serif:Georgia,"Times New Roman",serif; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --c-sys:#a8a296; --c-content:#2f6b4a; --c-q:#b07d2b; --c-msg:#3f6f8f; --c-reward:#2f6b4a; --c-rem:#c8552f;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--page);color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
+  .wrap{flex:1;display:flex;gap:16px;padding:14px 14px 8px;min-height:0}
+
+  /* ---------- LEFT: journey ---------- */
+  .journey{flex:1 1 auto;min-width:380px;background:var(--card);border:1px solid var(--line);
+           border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-height:0;box-shadow:0 2px 10px rgba(20,40,50,.05)}
+  .jhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .journey h1{font-family:var(--serif);font-size:22px;margin:0;color:#23302a;font-weight:600;letter-spacing:.2px}
+  .jhead .sub{font-size:12px;color:var(--muted);margin-top:4px;max-width:none;white-space:nowrap}
+  @media(max-width:1180px){.jhead .sub{white-space:normal}}
+  .zoombtn{background:#1a1a1a;color:#fff;border:none;border-radius:7px;padding:8px 13px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
+  .zoombtn:hover{background:#000}
+  .themestrip{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 6px}
+  .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:#867f73;background:transparent;border:1px solid var(--line);border-radius:4px;padding:5px 11px}
+  .chip.on{color:#2f6b4a;background:#eaf2ec;border-color:#bcdcc8;font-weight:700}
+  .legend2{display:flex;gap:15px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.03em;color:#867f73;margin:8px 0 8px}
+  .legend2 i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+  .jflow{flex:1;min-height:0;overflow-x:auto;overflow-y:auto;padding:8px 4px 14px}
+  .tracklabel{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:#5d6b62;text-transform:uppercase;margin:2px 0 4px}
+  .tracklabel.l2{border-top:1px dashed var(--line);margin-top:18px;padding-top:12px}
+  .branchnote{font-family:var(--mono);font-size:10px;color:#3aa088;margin:8px 0 2px;letter-spacing:.02em}
+  .lessonblock{transition:opacity .25s}
+  .lessonblock.dim{opacity:.4}
+  .lessonblock.dim.peek,.lessonblock.peek{opacity:1}
+  .track{display:flex;align-items:flex-start;gap:0;min-width:max-content;position:relative}
+  .track::before{content:"";position:absolute;left:14px;right:14px;top:13px;height:1px;background:#ddd6c8}
+  .col{position:relative;display:flex;flex-direction:column;align-items:center;padding-top:26px;width:198px;flex:0 0 auto;cursor:pointer}
+  .col .dot{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:#faf8f2;border:2px solid var(--teal);z-index:2;transition:.18s}
+  .col.active .dot{background:var(--terra);border-color:var(--terra);box-shadow:0 0 0 4px rgba(200,85,47,.18)}
+
+  .stage{background:#fff;border:1px solid var(--line);border-top:3px solid var(--ac,#cbd5d8);border-radius:8px;
+         padding:9px 11px;width:100%;box-shadow:0 1px 2px rgba(40,36,31,.05);transition:opacity .18s,box-shadow .18s,transform .18s}
+  .stage .stype{font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ac);margin-bottom:3px;font-weight:700}
+  .stage .stitle{font-size:12.5px;font-weight:700;color:#2a2722;line-height:1.25}
+  .stage .ssyn{font-size:11px;color:#736e64;line-height:1.42;margin-top:4px}
+  .type-sys{--ac:var(--c-sys)} .type-content{--ac:var(--c-content)} .type-q{--ac:var(--c-q)}
+  .type-msg{--ac:var(--c-msg)} .type-reward{--ac:var(--c-reward)}
+  .col.active .stage{box-shadow:0 0 0 2px var(--terra);background:#fffaf6}
+
+  .branchlbl{font-family:var(--mono);font-size:9px;font-weight:700;color:#c8552f;margin:8px 0 4px;letter-spacing:.05em}
+  .rem{background:#fdf3ee;border:1px dashed #e6b39f;border-top:3px solid var(--c-rem);border-radius:8px;padding:9px 11px;width:100%;transition:opacity .18s,box-shadow .18s}
+  .rem .stype{font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--c-rem);font-weight:700;margin-bottom:3px}
+  .rem .stitle{font-size:12px;font-weight:700;color:#a8492f}
+  .rem .ssyn{font-size:10.5px;color:#8a6a61;line-height:1.45;margin-top:4px}
+  .rem .retry{font-family:var(--mono);font-size:9px;font-weight:700;color:#c8552f;margin-top:6px;letter-spacing:.03em}
+  .col.rem-on .rem{box-shadow:0 0 0 2px var(--terra);background:#fdeee7}
+  .stnote{font-family:var(--mono);font-size:9px;line-height:1.45;color:#8a6d1f;background:#fbf3df;border:1px dashed #e6cf95;border-radius:6px;padding:6px 8px;margin-top:8px;width:100%}
+
+  .conn{flex:0 0 auto;width:40px;align-self:flex-start;margin-top:26px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;height:46px}
+  .conn .arw{color:#c2bbac;font-size:18px;line-height:46px}
+  .conn .clbl{position:absolute;top:-12px;font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.04em;color:#2f6b4a;white-space:nowrap}
+  .conn.hl .arw{color:var(--teal)}
+
+  .jflow.focus .stage:not(.hl), .jflow.focus .rem:not(.hl){opacity:.34}
+  .jflow.focus .col.active .stage{opacity:1}
+  .stage.hl{opacity:1;box-shadow:0 0 0 2px var(--teal);transform:translateY(-2px)}
+  .rem.hl{opacity:1;box-shadow:0 0 0 2px var(--c-rem)}
+
+  /* ---------- RIGHT: phone (WhatsApp) ---------- */
+  .right{flex:0 0 auto;height:100%;display:flex;align-items:center}
+  .phone{width:366px;max-width:42vw;height:100%;max-height:740px;background:#0b0f12;border-radius:38px;padding:9px;box-shadow:0 18px 44px rgba(20,40,50,.32);position:relative}
+  .screen{position:relative;height:100%;border-radius:29px;overflow:hidden;display:flex;flex-direction:column;background:var(--chat-bg)}
+  .notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:120px;height:21px;background:#0b0f12;border-radius:0 0 14px 14px;z-index:30}
+  header.bar{background:var(--wa-green);color:#fff;display:flex;align-items:center;gap:8px;padding:27px 11px 7px;z-index:20}
+  header.bar .back{font-size:18px;opacity:.95}
+  header.bar .av{width:33px;height:33px;border-radius:50%;background:#cfe3d6;display:flex;align-items:center;justify-content:center;font-size:16px}
+  header.bar .who{flex:1;min-width:0}
+  header.bar .who b{display:flex;align-items:center;gap:4px;font-size:14px;line-height:1.15}
+  header.bar .who .vf{font-size:10px;color:#a6e3c6}
+  header.bar .who span{font-size:10px;opacity:.85}
+  header.bar .ic{font-size:13px;opacity:.92;margin-left:3px}
+  .chat{flex:1;min-height:0;overflow-y:auto;padding:9px 11px 12px;
+        background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle cx='4' cy='4' r='1' fill='%23000' opacity='0.03'/></svg>");background-color:var(--chat-bg)}
+  .sys{align-self:center;background:#fff4c8;color:#54616b;font-size:10px;padding:5px 11px;border-radius:8px;margin:7px auto;width:max-content;max-width:90%;text-align:center}
+  .day{align-self:center;background:#d6e7ce;color:#3b4a54;font-size:10.5px;padding:4px 9px;border-radius:8px;margin:5px auto 9px;width:max-content}
+  .row{display:flex;margin:4px 0}.row.out{justify-content:flex-end}
+  .bubble{max-width:84%;padding:6px 9px 5px;border-radius:9px;font-size:13px;line-height:1.4;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.13);word-wrap:break-word;animation:pop .18s ease-out}
+  .row.in .bubble{background:var(--bubble-in);border-top-left-radius:2px}
+  .row.out .bubble{background:var(--bubble-out);border-top-right-radius:2px}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .bubble .en{display:block;color:var(--muted);font-size:10.5px;font-style:italic;margin-top:3px;line-height:1.35}
+  .bubble .t{font-size:9px;color:var(--muted);float:right;margin:4px 0 -2px 8px}
+  .bubble .check{color:#53bdeb}
+  .bubble.reward{background:#eaf7e2;border:1px solid #cfe9bd}
+  .bubble.wrong{background:#fdecea;border:1px solid #f2c2ba}
+  .bubble.summary{background:#fffdf4;border:1px solid #ece2bd}
+  .bubble.summary b.h{display:block;color:#8a6d1f;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+
+  /* nutrition breakdown card (delivered as a chat message) */
+  .nutri{padding:0;overflow:hidden;width:250px}
+  .nutri .nh{background:#ecf3ee;padding:7px 10px;font-size:11px;font-weight:800;color:#176039;display:flex;justify-content:space-between;align-items:center;margin:-6px -9px 0}
+  .nutri .nh .scan{font-family:var(--mono);font-size:8px;letter-spacing:.05em;color:#7a9b86;font-weight:700;text-transform:uppercase}
+  .nutri table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px}
+  .nutri td{padding:5px 2px;border-top:1px solid #efeadf}
+  .nutri td.it{color:#3a372f}
+  .nutri td.n{text-align:right;font-variant-numeric:tabular-nums;color:#5d5a52;white-space:nowrap}
+  .nutri tr.tot td{border-top:1.5px solid #d8d2c4;font-weight:800;color:#2a2722}
+  .nutri tr.head td{font-family:var(--mono);font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:#9b958a;padding:4px 2px 2px}
+  .nutri .cap2{font-size:10px;color:#8b8678;border-top:1px solid #efeadf;font-style:italic;padding-top:5px;margin-top:2px}
+
+  /* progress card (delivered as a chat message — WhatsApp has no dashboard) */
+  .prog{width:250px}
+  .prog .pbar{margin:6px 0 2px}
+  .prog .pb-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+  .prog .pb-lbl b{font-weight:800}
+  .prog .pb-lbl .cal-c{color:var(--cal)} .prog .pb-lbl .prot-c{color:var(--prot)}
+  .prog .track3{height:8px;border-radius:5px;background:#e6e0d2;overflow:hidden}
+  .prog .fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,1,.3,1)}
+  .prog .fill.cal{background:var(--cal)} .prog .fill.prot{background:var(--prot)}
+  .prog .done{font-size:10px;color:#2f6b4a;font-weight:700;margin-top:5px}
+
+  .typing{display:flex;gap:4px;align-items:center;background:var(--bubble-in);border-radius:9px;border-top-left-radius:2px;padding:9px 11px;width:max-content;box-shadow:0 1px 1px rgba(0,0,0,.13)}
+  .typing span{width:6px;height:6px;border-radius:50%;background:#9aa6ac;animation:blink 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+  .scan-ind{display:flex;gap:7px;align-items:center;background:var(--bubble-in);border-radius:9px;border-top-left-radius:2px;padding:9px 11px;width:max-content;box-shadow:0 1px 1px rgba(0,0,0,.13);font-size:11.5px;color:#5d6b62}
+  .scan-ind .sp{width:13px;height:13px;border:2px solid #cfe0d6;border-top-color:var(--wa-teal);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .vn{display:flex;align-items:center;gap:8px;min-width:190px}
+  .vn .av{width:30px;height:30px;border-radius:50%;background:#dfe5e7;flex:0 0 auto;position:relative;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .vn .play{width:27px;height:27px;border-radius:50%;background:var(--wa-teal);color:#fff;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:none}
+  .vn .mid{flex:1}.vn .track2{position:relative;height:3px;background:#cfd6d9;border-radius:2px;margin:7px 0}
+  .vn .knob{position:absolute;top:50%;left:18%;width:8px;height:8px;border-radius:50%;background:var(--wa-teal);transform:translate(-50%,-50%)}
+  .vn .meta{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted)}
+
+  .tray{flex:0 0 auto;max-height:0;overflow:hidden;background:#16242e;border-top:2px dashed #4a6b78;transition:max-height .34s cubic-bezier(.2,.8,.2,1)}
+  .tray.show{max-height:62%}
+  .tray .inner{transform:translateY(16px);opacity:0;transition:transform .3s ease,opacity .28s;padding:8px 11px 11px}
+  .tray.show .inner{transform:none;opacity:1}
+  .tray .traylabel{font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;color:#7fd3be;margin-bottom:4px}
+  .tray .traylabel b{color:#9fb4bc;font-weight:600;text-transform:none;letter-spacing:0}
+  .tray .qhint{font-size:11px;color:#a9bcc4;margin:0 0 4px;font-style:italic}
+  .tray .choice{display:flex;align-items:flex-start;gap:8px;width:100%;background:transparent;border:none;border-top:1px solid #2a3b45;padding:9px 2px;font-size:12.5px;text-align:left;color:#e3edf1;font-weight:600;cursor:pointer}
+  .tray .choice:hover{background:#1d2f3a}
+  .tray .choice .num{color:var(--amber);font-weight:700;min-width:15px}
+  .tray .choice .ic{min-width:15px}
+  .tray .choice small{display:block;color:#8aa0aa;font-weight:400;font-size:10.5px;font-style:italic;margin-top:1px}
+
+  footer.banner{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);color:#6f8088;font-size:10.8px;line-height:1.5;padding:8px 16px}
+  footer.banner b{color:#4a5b62}
+
+  .zoom{position:fixed;inset:0;background:rgba(238,242,243,.97);z-index:100;display:none;flex-direction:column;padding:18px}
+  .zoom.show{display:flex}
+  .zoom .zbar{display:flex;justify-content:space-between;align-items:center;color:#27424b;margin-bottom:10px}
+  .zoom .zbar b{font-size:16px;color:var(--teal)}
+  .zoom .zclose{background:#eef3f3;color:#3c545b;border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;font-size:13px}
+  .zoom .zbody{flex:1;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+
+  /* ============ MOBILE (≤640px) ============ */
+  .mtabs{display:none}
+  @media(max-width:640px){
+    body{height:100dvh}
+    .mtabs{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:#fff;border-bottom:1px solid var(--line);z-index:50;flex:0 0 auto}
+    .mtitle{font-family:var(--serif);font-weight:600;font-size:15px;color:#23302a}
+    .mtabbtns{display:flex;gap:6px}
+    .mtab{font-family:var(--mono);font-size:11.5px;padding:7px 12px;border:1px solid var(--line);background:#f3f6f6;color:#5d6b62;border-radius:8px}
+    .mtab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+    .wrap{flex-direction:column;padding:0;gap:0;min-height:0}
+    body.tab-demo .journey{display:none}
+    body.tab-journey .right{display:none}
+    .right{flex:1;width:100%;max-width:none;height:auto;flex-direction:column;align-items:stretch}
+    .phone{flex:1;width:100%;max-width:none;height:auto;background:none;padding:0;border-radius:0;box-shadow:none}
+    .screen{border-radius:0;height:100%}
+    .notch{display:none}
+    header.bar{padding-top:12px}
+    .journey{flex:1;min-width:0;border:none;border-radius:0;box-shadow:none;padding:12px 13px 0}
+    .journey h1{font-size:20px}
+    .jhead .sub{white-space:normal}
+    .jflow{overflow-x:hidden}
+    .track{flex-direction:column;align-items:stretch;min-width:0}
+    .track::before{display:none}
+    .col{width:100%;padding-top:4px}
+    .col .dot{display:none}
+    .conn{width:100%;height:20px;margin:1px 0;align-self:stretch;justify-content:center}
+    .conn .arw{transform:rotate(90deg);line-height:20px}
+    .conn .clbl{position:static;text-align:center;display:block}
+    body.tab-demo footer.banner{display:none}
+    footer.banner{font-size:10px;padding:8px 12px}
+  }
+</style>
+</head>
+<body class="tab-demo">
+  <div class="mtabs" id="mtabs">
+    <span class="mtitle">Poshan Saathi</span>
+    <div class="mtabbtns">
+      <button class="mtab active" data-tab="demo" onclick="setMobileTab('demo')">▶ Demo</button>
+      <button class="mtab" data-tab="journey" onclick="setMobileTab('journey')">🗺 Journey</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <!-- LEFT: adaptive journey -->
+    <section class="journey">
+      <div class="jhead">
+        <div>
+          <h1>Poshan Saathi — conversation journey</h1>
+          <div class="sub">Hover to trace a path · <b>click any step to play the demo from there</b> · <b style="color:#c8552f;font-weight:600">amber</b> = live position.</div>
+        </div>
+        <button class="zoombtn" onclick="openZoom()">⤢ Expand</button>
+      </div>
+      <div class="legend2">
+        <span><i style="background:#2f6b4a"></i>BOT MESSAGE</span>
+        <span><i style="background:#b07d2b"></i>NUTRITION CHECK</span>
+        <span><i style="background:#c8552f"></i>CLARIFY / BOOST LOOP</span>
+        <span><i style="background:#2f6b4a"></i>REWARD</span>
+        <span><i style="background:#a8a296"></i>SYSTEM</span>
+      </div>
+      <div class="themestrip" id="themestrip"></div>
+      <div class="jflow" id="journeyHost"></div>
+    </section>
+
+    <!-- RIGHT: WhatsApp bot -->
+    <div class="right">
+      <div class="phone">
+        <div class="screen">
+          <div class="notch"></div>
+          <header class="bar">
+            <div class="back">‹</div><div class="av">🥗</div>
+            <div class="who"><b>Poshan Saathi <span class="vf">✔ business</span></b><span>online</span></div>
+            <div class="ic">📹</div><div class="ic">📞</div><div class="ic">⋮</div>
+          </header>
+          <div class="chat" id="chat"></div>
+          <div class="tray" id="tray"><div class="inner">
+            <div class="traylabel">Demo input · <b>placeholder — becomes the patient typing / a voice note</b></div>
+            <div class="qhint" id="qhint"></div><div id="trayBody"></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="banner">
+    <b>Poshan Saathi</b> — clickable mock-up of a TB-nutrition WhatsApp bot (right). The patient <b>types or sends a voice note</b> of what they ate ("2 roti, dal, rice"); the bot looks up calories &amp; protein, tracks the running daily total, and nudges toward the targets a TB patient needs to recover. The left panel is the adaptive conversation journey, with its clarification and protein-boost branches. <b>Real vs simulated:</b> the food parsing, nutrition values and progress are a front-end mock, not a live model or WhatsApp connection; voice notes are placeholders. Targets — <b>2000 kcal · 50 g protein/day</b> — are illustrative of adult-TB / Ni-kshay nutrition guidance; a real patient's targets are set by their doctor or dietitian. Built on the ASHA Saathi / HealthBI demo language and interaction patterns.
+  </footer>
+
+  <div class="zoom" id="zoom">
+    <div class="zbar"><b>Conversation journey — full view</b><button class="zclose" onclick="closeZoom()">✕ Close</button></div>
+    <div class="zbody" id="zoomBody"></div>
+  </div>
+
+<script>
+/* ============ JOURNEY ============ */
+const THEMES=[['t1','Log a meal (by text)',true],['t2','End-of-day review',false],['t3','Weekly report to ASHA',false],['t4','Low-cost meal ideas',false]];
+const ENTRYSTEPS=[
+ {id:'trigger',type:'sys',title:'Meal reminder',syn:'A daily push at meal times — "tell me what you ate" — with how much of today’s target is still left.'},
+ {id:'open',type:'sys',title:'Choose what to do',syn:'The patient picks an action by replying; the flow then splits by task.'},
+];
+const F1STEPS=[
+ {id:'cap',type:'content',title:'Tell the bot what you ate',syn:'The patient types — or sends a voice note — listing the meal in plain words. No photo, no counting, near-zero data.'},
+ {id:'rec',type:'content',title:'Bot reads the meal',syn:'It parses the message into food items (roti, dal, rice, paneer…) with assumed standard portions.'},
+ {id:'confirm',type:'q',title:'Confirm the items',syn:'"Did I read this right, and are the portions about right?" Correct: yes. The patient can correct an item or portion.',
+   rem:{id:'rfix',title:'Clarification loop',syn:'If the bot misreads or assumes a wrong portion, the patient says so. The bot shows what it understood and lets them edit an item or set "how many", then re-totals — it never silently guesses, so the log reflects what was actually eaten.'},corr:true},
+ {id:'breakdown',type:'content',title:'Nutrition breakdown',syn:'Per-item calories and protein, then the meal total — the core value the patient came for.'},
+ {id:'progress',type:'content',title:'Daily progress so far',syn:'A progress card (sent as a message — WhatsApp has no dashboard) shows calories and protein vs today’s targets.'},
+ {id:'gap',type:'q',title:'Protein-gap check',syn:'Patient is short on protein. "Which is the best protein booster?" Correct: milk + eggs.',
+   rem:{id:'rgap',title:'Protein-boost loop',syn:'A wrong pick is named first, then escalates: Tier 1 — short why-protein-matters note. Tier 2 — a protein-per-food chart (egg, dal, milk, paneer, sattu). Tier 3 — bundles the key foods into one low-cost suggestion and flags the ASHA/dietitian, then reveals the best answer.'},corr:true},
+ {id:'reward',type:'reward',title:'Meal logged',syn:'Streak + a star, delivered as a chat message. The day’s running total is saved.'},
+ {id:'sched',type:'sys',title:'Next-meal reminder',syn:'Schedules the next nudge and shows what’s still left to hit today’s targets.'},
+];
+const F2STEPS=[
+ {id:'d_open',type:'content',title:'End-of-day summary',syn:'Evening recap — total calories and protein for the day against the targets.'},
+ {id:'d_q',type:'q',title:'Close the gap?',syn:'Short on both. "What should you do this evening?" Correct: a protein-rich snack.',
+   rem:{id:'d_rem',title:'Remediation loop',syn:'"Skip it" or "I’ll eat less tomorrow" is named gently first, then: why under-eating slows TB recovery → a cheap protein-dense snack idea → if still unsure, offers to loop in the ASHA, then reveals the answer.'},corr:true},
+ {id:'d_suggest',type:'content',title:'Suggested snack',syn:'A low-cost, locally available snack (sattu drink + peanuts) sized to close the calorie and protein gap.'},
+ {id:'d_log',type:'content',title:'Log the snack',syn:'The patient confirms; the progress card completes and both targets are met for the day.'},
+ {id:'d_share',type:'sys',title:'Share with ASHA',syn:'Weekly adherence can be shared with the ASHA / health worker — with a clear consent + governance note.',note:'⚑ Sharing is opt-in. Nutrition data informs support; it is never used punitively or to affect benefit eligibility.'},
+ {id:'d_reward',type:'reward',title:'Targets met',syn:'Both targets hit — a badge and the day’s streak, framed around recovery.'},
+ {id:'d_sched',type:'sys',title:'Tomorrow’s plan',syn:'Sets tomorrow’s reminders and carries the streak forward.'},
+];
+const TYPELBL={sys:'System',content:'Bot',q:'Nutrition check',msg:'Key message',reward:'Reward'};
+function trackHTML(steps){
+  let html='<div class="track">';
+  steps.forEach((s,i)=>{
+    const next=steps[i+1]?steps[i+1].id:'';
+    html+=`<div class="col" id="col_${s.id}" data-id="${s.id}" data-rem="${s.rem?s.rem.id:''}" data-next="${next}"
+            onmouseenter="hoverIn('${s.id}')" onmouseleave="hoverOut()" onclick="jumpTo('${s.id}')" title="▶ Click to play the demo from this step">
+       <div class="dot"></div>
+       <div class="stage type-${s.type}" id="${s.id}"><div class="stype">${TYPELBL[s.type]||''}</div><div class="stitle">${s.title}</div><div class="ssyn">${s.syn}</div></div>`;
+    if(s.rem){
+      html+=`<div class="branchlbl">✗ IF WRONG ↓</div>
+        <div class="rem" id="${s.rem.id}"><div class="stype">Remediation</div><div class="stitle">${s.rem.title}</div><div class="ssyn">${s.rem.syn}</div><div class="retry">↺ BACK TO THE CHECK — RETRY</div></div>`;
+    }
+    if(s.note){ html+=`<div class="stnote">${s.note}</div>`; }
+    html+='</div>';
+    if(next){
+      const lbl=s.corr?'<span class="clbl">if correct →</span>':'';
+      html+=`<div class="conn" id="conn_${s.id}">${lbl}<span class="arw">›</span></div>`;
+    }
+  });
+  html+='</div>';return html;
+}
+function buildJourney(){
+  document.getElementById('themestrip').innerHTML=THEMES.map(t=>`<span class="chip${t[2]?' on':''}">${t[1]}</span>`).join('');
+  document.getElementById('journeyHost').innerHTML=
+    '<div class="lessonblock" data-lesson="entry"><div class="tracklabel">Shared entry — every day starts here</div>'+trackHTML(ENTRYSTEPS)+'</div>'+
+    '<div class="branchnote">↓ The patient replies with a task, and the flow splits below</div>'+
+    '<div class="lessonblock" data-lesson="l1"><div class="tracklabel l2">Task 1 · Log a meal by text / voice</div>'+trackHTML(F1STEPS)+'</div>'+
+    '<div class="lessonblock" data-lesson="l2"><div class="tracklabel l2">Task 2 · End-of-day review &amp; closing the gap</div>'+trackHTML(F2STEPS)+'</div>';
+}
+let pinned=null;
+function applyHL(id){
+  const flow=document.getElementById('journeyHost');
+  flow.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));
+  flow.querySelectorAll('.conn.hl').forEach(e=>e.classList.remove('hl'));
+  if(!id){flow.classList.remove('focus');return;}
+  flow.classList.add('focus');
+  const col=document.getElementById('col_'+id);
+  const ids=[id]; if(col.dataset.rem)ids.push(col.dataset.rem); if(col.dataset.next)ids.push(col.dataset.next);
+  ids.forEach(x=>{const el=document.getElementById(x);if(el)el.classList.add('hl');});
+  const c=document.getElementById('conn_'+id); if(c)c.classList.add('hl');
+}
+function hoverIn(id){const b=document.getElementById('col_'+id);const blk=b&&b.closest('.lessonblock');
+  if(blk&&blk.classList.contains('dim'))return;
+  applyHL(id);}
+function hoverOut(){applyHL(pinned);}
+function stage(id){
+  document.querySelectorAll('#journeyHost .col').forEach(c=>c.classList.remove('active','rem-on'));
+  const el=document.getElementById(id);
+  const col=el?el.closest('.col'):document.getElementById('col_'+id);
+  const lesson = id.indexOf('d_')===0 ? 'l2' : (id==='trigger'||id==='open' ? 'entry' : 'l1');
+  document.querySelectorAll('#journeyHost .lessonblock').forEach(b=>{
+    b.classList.remove('peek');
+    const isOther = (lesson==='entry') ? (b.dataset.lesson!=='entry') : (b.dataset.lesson!==lesson);
+    b.classList.toggle('dim', isOther);
+  });
+  if(col){col.classList.add('active'); if(el&&el.classList.contains('rem'))col.classList.add('rem-on');
+    try{col.scrollIntoView({behavior:'smooth',inline:'center',block:'center'});}catch(e){}}
+}
+function openZoom(){document.getElementById('zoomBody').innerHTML=document.getElementById('journeyHost').innerHTML;document.getElementById('zoom').classList.add('show');}
+function closeZoom(){document.getElementById('zoom').classList.remove('show');}
+
+/* ============ DEMO ENGINE ============ */
+const CAL_TGT=2000, PROT_TGT=50;
+let calNow=0, protNow=0, streak=0, totalQ=2, score=0, wrong1=0, wrong2=0;
+function setTotals(c,p){calNow=c;protNow=p;}
+const chat=document.getElementById('chat');
+const tray=document.getElementById('tray'),trayBody=document.getElementById('trayBody'),qhint=document.getElementById('qhint');
+function now(){const d=new Date();let h=d.getHours(),m=d.getMinutes();const ap=h>=12?'pm':'am';h=h%12||12;return h+':'+String(m).padStart(2,'0')+' '+ap;}
+function scrollC(){chat.scrollTop=chat.scrollHeight;}
+function sysM(t){const e=document.createElement('div');e.className='sys';e.innerHTML=t;chat.appendChild(e);scrollC();}
+function day(t){const e=document.createElement('div');e.className='day';e.textContent=t;chat.appendChild(e);scrollC();}
+function bubble(html,dir='in',en='',cls=''){const row=document.createElement('div');row.className='row '+dir;const b=document.createElement('div');b.className='bubble '+cls;
+  let inner=html;if(en)inner+='<span class="en">'+en+'</span>';inner+='<span class="t">'+now()+(dir==='out'?' <span class="check">✓✓</span>':'')+'</span>';
+  b.innerHTML=inner;row.appendChild(b);chat.appendChild(row);scrollC();return b;}
+function starMsg(msg,en){streak++;bubble('🌟 '+msg+' Aapko ek star mila ⭐  <b>(streak: '+streak+' din 🔥)</b>','in',en,'reward');}
+function voiceNote(tag,secs){const id='vn'+Math.random().toString(36).slice(2,6);
+  const html=`<div class="vn"><button class="play" id="${id}b">▶</button><div class="mid"><div class="track2"><div class="knob"></div></div><div class="meta"><span>0:${String(secs).padStart(2,'0')}</span><span>${tag}</span></div></div><div class="av">🙋‍♀️<span>🎙️</span></div></div>`;
+  const b=bubble(html,'out');const btn=b.querySelector('#'+id+'b');btn.onclick=()=>{btn.textContent=btn.textContent==='▶'?'❚❚':'▶';};return b;}
+
+/* nutrition breakdown card */
+function nutriCard(rows,totCal,totProt){
+  const body=rows.map(r=>`<tr><td class="it">${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]} g</td></tr>`).join('');
+  const html=`<div class="nutri"><div class="nh"><span>Nutrition breakdown</span><span class="scan">✓ read</span></div>
+    <table><tr class="head"><td>Item</td><td class="n">kcal</td><td class="n">protein</td></tr>
+    ${body}
+    <tr class="tot"><td>Total</td><td class="n">${totCal}</td><td class="n">${totProt} g</td></tr></table>
+    <div class="cap2">Looked up from a food table · standard katori/roti portions assumed</div></div>`;
+  const row=document.createElement('div');row.className='row in';const b=document.createElement('div');b.className='bubble';b.style.maxWidth='90%';
+  b.innerHTML=html+'<span class="t">'+now()+'</span>';row.appendChild(b);chat.appendChild(row);scrollC();
+}
+
+/* daily progress card (sent as a message) */
+function progCard(){
+  const cp=Math.min(100,Math.round(calNow/CAL_TGT*100)), pp=Math.min(100,Math.round(protNow/PROT_TGT*100));
+  const both=(calNow>=CAL_TGT&&protNow>=PROT_TGT);
+  const html=`<div class="prog">
+    <div class="pbar"><div class="pb-lbl"><span>Calories</span><b class="cal-c">${Math.round(calNow)} / ${CAL_TGT} kcal</b></div><div class="track3"><div class="fill cal" style="width:0%"></div></div></div>
+    <div class="pbar"><div class="pb-lbl"><span>Protein</span><b class="prot-c">${Math.round(protNow)} / ${PROT_TGT} g</b></div><div class="track3"><div class="fill prot" style="width:0%"></div></div></div>
+    ${both?'<div class="done">✅ Dono target poore! · both targets met</div>':''}
+  </div>`;
+  const row=document.createElement('div');row.className='row in';const b=document.createElement('div');b.className='bubble';b.style.maxWidth='90%';
+  b.innerHTML=html+'<span class="t">'+now()+'</span>';row.appendChild(b);chat.appendChild(row);scrollC();
+  const fills=b.querySelectorAll('.fill');setTimeout(()=>{fills[0].style.width=cp+'%';fills[1].style.width=pp+'%';},60);
+}
+
+/* protein-per-food chart (used in the boost remediation) */
+function proteinChart(){
+  const foods=[['🥚 2 eggs',12],['🥤 Sattu (1 glass)',12],['🥣 Dal (1 katori)',9],['🧀 Paneer (50g)',9],['🥛 Milk (1 glass)',8]];
+  const max=12;
+  const rows=foods.map(f=>{const w=Math.round(f[1]/max*100);return `<div style="display:flex;align-items:center;gap:7px;margin:4px 0;font-size:11px"><span style="min-width:96px;color:#3a372f">${f[0]}</span><span style="flex:1;background:#e6e0d2;border-radius:5px;height:9px;overflow:hidden"><span style="display:block;height:100%;width:${w}%;background:#2f6b4a;border-radius:5px"></span></span><b style="min-width:30px;text-align:right;color:#2f6b4a">${f[1]}g</b></div>`}).join('');
+  const html=`<b style="display:block;color:#176039;font-size:11px;margin-bottom:5px">Protein per cheap, local food</b>${rows}`;
+  bubble(html,'in','How much protein common, low-cost foods add — so the patient can choose.','');
+}
+
+function clearChoices(){tray.classList.remove('show');setTimeout(()=>{if(!tray.classList.contains('show')){trayBody.innerHTML='';qhint.textContent='';}},340);}
+function showChoices(list,header){trayBody.innerHTML='';qhint.textContent=header||'';
+  list.forEach(c=>{const btn=document.createElement('button');btn.className='choice';
+    const lead=c.num?`<span class="num">${c.num}</span>`:(c.ic?`<span class="ic">${c.ic}</span>`:'');
+    btn.innerHTML=lead+'<span>'+c.label+(c.sub?`<small>${c.sub}</small>`:'')+'</span>';
+    btn.onclick=()=>{if(c.vn){voiceNote(c.vn[0],c.vn[1]);}else if(c.echo!==false){bubble(c.echo||c.label,'out');}trayBody.innerHTML='';qhint.textContent='';tray.classList.remove('show');c.go();};
+    trayBody.appendChild(btn);});
+  requestAnimationFrame(()=>tray.classList.add('show'));setTimeout(scrollC,120);setTimeout(scrollC,430);}
+function typing(ms,then){const row=document.createElement('div');row.className='row in';const t=document.createElement('div');t.className='typing';t.innerHTML='<span></span><span></span><span></span>';row.appendChild(t);chat.appendChild(row);scrollC();setTimeout(()=>{row.remove();then();},ms);}
+function reading(ms,label,then){const row=document.createElement('div');row.className='row in';const t=document.createElement('div');t.className='scan-ind';t.innerHTML='<span class="sp"></span>'+(label||'Reading…');row.appendChild(t);chat.appendChild(row);scrollC();setTimeout(()=>{row.remove();then();},ms);}
+function seq(steps,done){let i=0;(function nxt(){if(i>=steps.length){done&&done();return;}const s=steps[i++];typing(s.wait||650,()=>{s.run();nxt();});})();}
+
+function restart(){chat.innerHTML='';clearChoices();streak=0;score=0;wrong1=0;wrong2=0;setTotals(0,0);buildJourney();start();}
+
+/* ---- ENTRY ---- */
+function start(){stage('trigger');setTotals(0,0);day('TODAY · Sunita');sysM('🔒 Messages are end-to-end encrypted. Your meals are private.');
+  seq([
+    {wait:500,run:()=>bubble('Namaste Sunita ji 🌞 Dophar ho gayi — aaj kya khaaya, bata dein?','in','Good afternoon, Sunita. It’s midday — tell me what you ate?')},
+    {wait:850,run:()=>bubble('TB se theek hone ke liye aaj ka lakshya: <b>2000 calorie</b> aur <b>50g protein</b>. Abhi tak: 0 / 0. Neeche se chunein 👇','in','Your target for TB recovery today: 2000 kcal and 50g protein. So far: 0 / 0. Choose below.')},
+  ],openTracker);}
+function openTracker(){stage('open');
+  showChoices([
+    {num:'1.',label:'Khaana likhein / bolein',sub:'Log a meal by text or voice',echo:'Log a meal',go:mealCapture},
+    {num:'2.',label:'Aaj ka hisaab dekhein',sub:'End-of-day review',echo:'End-of-day review',go:dayOpen},
+    {num:'3.',label:'Hafte ki report — ASHA ko',sub:'Weekly report · coming soon',echo:'Weekly report',go:soon},
+  ],'Aap kya karna chahti hain?');}
+function soon(){bubble('Ye hissa abhi demo mein nahi hai — "khaana likhein" khol rahe hain.','in','That isn’t in this demo yet — opening "log a meal".');setTimeout(mealCapture,850);}
+
+/* ---- FLOW 1: log a meal by text/voice ---- */
+function mealCapture(){stage('cap');score=0;wrong1=0;wrong2=0;
+  seq([
+    {wait:600,run:()=>bubble('Bas likh dein ya voice note bhej dein — jaise "2 roti, dal, chawal". Kuch ginne ki zaroorat nahi 🙂','in','Just type it, or send a voice note — like "2 roti, dal, rice". No need to count anything.')},
+  ],()=>showChoices([
+      {ic:'✍️',label:'"2 roti, dal, chawal, paneer sabzi, salad"',sub:'Type the meal (placeholder for free text)',echo:'2 roti, dal, chawal, paneer sabzi, thoda salad',go:mealRead},
+      {ic:'🎙',label:'Voice note bhejein',sub:'Send a voice note instead (placeholder)',vn:['voice note · 0:08',8],go:mealRead},
+    ],'Aaj kya khaaya? · what did you eat?'));}
+function mealRead(){stage('rec');
+  reading(1500,'Khaana padh rahe hain…',()=>{
+    seq([
+      {wait:450,run:()=>bubble('Maine ye samjha 👇','in','Here’s what I understood:')},
+      {wait:650,run:()=>bubble('🫓 2 roti · 🥣 1 katori dal · 🍚 1 katori chawal · 🧀 paneer sabzi · 🥗 salad','in','2 roti · 1 katori dal · 1 katori rice · paneer curry · salad')},
+    ],mealConfirm);
+  });}
+function mealConfirm(){stage('confirm');
+  seq([{wait:600,run:()=>bubble('<b>Kya ye sahi hai?</b> Portion ya koi cheez galat ho to theek kar dein.','in','Is this right? Fix any item or portion if it’s off.')}],()=>{
+    showChoices([
+      {num:'1.',label:'Haan, sahi hai',sub:'Yes, correct',echo:'Haan, sahi hai',go:mealBreakdown},
+      {num:'2.',label:'Paneer nahi, soya tha',sub:'It was soya, not paneer',echo:'Paneer nahi — soya sabzi thi',go:mealFix},
+    ],'Confirm karein');});}
+function mealFix(){stage('rfix');
+  seq([
+    {wait:450,run:()=>bubble('Theek hai — jo asal mein khaaya wahi sahi 👍 Badal diya 👇','in','Got it — what you actually ate is what counts. Updated:')},
+    {wait:700,run:()=>bubble('🧀 paneer sabzi → 🫛 <b>soya sabzi</b>. Baaki same. Soya mein protein thoda zyada hai 🙂','in','paneer → soya curry. The rest is the same — soya has a bit more protein.')},
+  ],()=>showChoices([{ic:'✔',label:'Theek hai, aage badhein',sub:'Looks right now',echo:'Theek hai',go:mealBreakdown}],'The patient stays in control of the log'));}
+function mealBreakdown(){stage('breakdown');
+  seq([
+    {wait:700,run:()=>bubble('Shukriya. Is khaane ki poshan jaankari 👇','in','Thanks. Here’s the nutrition for this meal:')},
+    {wait:650,run:()=>nutriCard([['🫓 2 roti','160','6'],['🥣 Dal (1 katori)','150','9'],['🍚 Rice (1 katori)','200','4'],['🧀 Paneer sabzi','250','14'],['🥗 Salad + curd','60','5']],'820','38')},
+  ],mealProgress);}
+function mealProgress(){stage('progress');setTotals(820,38);
+  seq([
+    {wait:650,run:()=>bubble('Aaj ka hisaab abhi tak 👇','in','Your running total for today:')},
+    {wait:450,run:progCard},
+  ],proteinGapQ);}
+function proteinGapQ(){stage('gap');
+  seq([
+    {wait:700,run:()=>bubble('Calorie achhi chal rahi hai. Protein <b>38/50g</b> — bas thoda peeche. TB se theek hone ke liye protein sabse zaroori hai 💪','in','Calories look good. Protein is 38/50g — just a little behind. Protein matters most for TB recovery.')},
+    {wait:750,run:()=>bubble('<b>Sabse achha protein booster kaunsa hai?</b>','in','Which is the best protein booster?')},
+  ],()=>{
+    showChoices([
+      {num:'1.',label:'Aur thoda chawal',sub:'A bit more rice',echo:'Aur thoda chawal',go:gapWrong},
+      {num:'2.',label:'1 glass doodh + 2 ande',sub:'A glass of milk + 2 eggs',echo:'Doodh aur ande',go:gapRight},
+      {num:'3.',label:'Ek aur roti',sub:'One more roti',echo:'Ek aur roti',go:gapWrong},
+    ],'Apna jawaab chunein');});}
+function gapWrong(){stage('rgap');wrong1++;
+  if(wrong1===1){
+    seq([
+      {wait:450,run:()=>bubble('❌ <b>Yeh sabse achha vikalp nahi hai.</b>','in','That’s not the best option.','wrong')},
+      {wait:750,run:()=>bubble('Chawal aur roti zyaadatar <b>calorie</b> dete hain, protein kam. Aapko abhi protein chahiye — wo cheez chunein jisme protein zyada ho 💪','in','Rice and roti are mostly calories, low protein. You need protein now — pick a protein-rich food.')},
+    ],()=>showChoices([{ic:'↩',label:'Phir se koshish karein',sub:'Try again',echo:'Phir se',go:proteinGapQ}]));
+  } else if(wrong1===2){
+    seq([
+      {wait:450,run:()=>bubble('❌ <b>Yeh bhi sahi nahi hai.</b> Ek chart se dekhte hain kisme kitna protein hai 👇','in','Still not right — let’s see how much protein each food gives.','wrong')},
+      {wait:700,run:proteinChart},
+    ],()=>showChoices([{ic:'↩',label:'Ab jawaab dein',sub:'Answer again',echo:'Phir se',go:proteinGapQ}]));
+  } else {
+    seq([
+      {wait:450,run:()=>bubble('❌ <b>Abhi bhi sahi nahi hua.</b> Chinta na karein — ek aasaan tareeka 👇','in','Still not correct — no worries. Here’s a simple way.','wrong')},
+      {wait:700,run:proteinChart},
+      {wait:700,run:()=>bubble('Ye baat aapki <b>ASHA / dietitian</b> ko bhi bata di — wo agli baar protein-rich khaane mein madad karengi.','in','I’ve flagged this for your ASHA / dietitian to help with protein-rich meals next time. (Persistent gaps escalate to a human.)','reward')},
+      {wait:700,run:()=>bubble('✅ <b>Sahi jawaab:</b> 1 glass doodh + 2 ande — sabse zyada protein. Chaliye jodte hain.','in','The correct answer: a glass of milk + 2 eggs — the most protein. Let’s add it.')},
+    ],gapResolved);
+  }}
+function gapRight(){
+  seq([
+    {wait:500,run:()=>bubble('Bilkul sahi! 🥛🥚 Doodh aur ande mein sabse zyada protein hai.','in','Exactly right — milk and eggs pack the most protein.')},
+    {wait:500,run:()=>starMsg('Achha chunaav.','Recognition arrives as a chat message — WhatsApp has no score panel, so the bot sends one.')},
+  ],gapResolved);}
+function gapResolved(){score++;
+  setTotals(820+290,38+20);
+  seq([
+    {wait:650,run:()=>bubble('Jodne ke baad: 🥛 doodh (150 kcal · 8g) + 🥚 2 ande (140 kcal · 12g). Protein ab <b>58/50g</b> — target poora 🎯👏','in','After adding: milk (150 kcal, 8g) + 2 eggs (140 kcal, 12g). Protein is now 58/50g — target met.')},
+    {wait:450,run:progCard},
+  ],mealReward);}
+function mealReward(){stage('reward');
+  seq([
+    {wait:700,run:()=>bubble('🎉 <b>Khaana log ho gaya!</b> Aaj ka protein target poora ✅ Streak aage badhi 🔥','in','Meal logged! Today’s protein target is met. Your streak continues.','reward')},
+  ],()=>showChoices([{ic:'▸',label:'Aage badhein',sub:'Continue',echo:'Aage badhein',go:mealSched}],'Tap to continue'));}
+function mealSched(){stage('sched');
+  seq([{wait:650,run:()=>bubble('Raat ke khaane ka reminder <b>shaam 8 baje</b> bhej dungi. Protein ho gaya 💪 — calorie abhi bhi <b>~890 kcal</b> baaki hai.','in','I’ll remind you for dinner at 8pm. Protein’s done — you still have ~890 kcal to go today.')}],()=>{
+    showChoices([
+      {num:'2.',label:'Aaj ka hisaab dekhein',sub:'End-of-day review',echo:'End-of-day review',go:dayOpen},
+      {ic:'↺',label:'Demo dobara chalayein',sub:'Restart',echo:false,go:restart},
+    ],'Aage kya karein');});}
+
+/* ---- FLOW 2: end-of-day review ---- */
+function dayOpen(){stage('d_open');setTotals(1750,42);wrong1=0;wrong2=0;
+  seq([
+    {wait:650,run:()=>bubble('🌙 Din ka hisaab. Aaj aapne 3 baar khaana log kiya 👇','in','End of day. You logged 3 meals today:')},
+    {wait:500,run:progCard},
+    {wait:650,run:()=>bubble('Calorie: <b>1750/2000</b> · Protein: <b>42/50g</b>. Dono target ke kareeb — par abhi peeche.','in','Calories 1750/2000, protein 42/50g — close on both, but not there yet.')},
+  ],dayQ);}
+function dayQ(){stage('d_q');
+  seq([{wait:700,run:()=>bubble('<b>Aaj shaam aapko kya karna chahiye?</b>','in','What should you do this evening?')}],()=>{
+    showChoices([
+      {num:'1.',label:'Kuch nahi, kal dekhenge',sub:'Nothing, leave it for tomorrow',echo:'Kuch nahi',go:dayWrong},
+      {num:'2.',label:'Ek protein-wala halka snack lein',sub:'Have a protein-rich snack',echo:'Ek protein snack lungi',go:dayRight},
+      {num:'3.',label:'Kal kam khaa lungi',sub:'I’ll just eat less tomorrow',echo:'Kal kam khaaungi',go:dayWrong},
+    ],'Apna jawaab chunein');});}
+function dayWrong(){stage('d_rem');wrong2++;
+  if(wrong2===1){
+    seq([
+      {wait:450,run:()=>bubble('Samajh sakti hoon — par <b>ye sabse achha nahi hai.</b>','in','I understand — but that’s not the best choice.','wrong')},
+      {wait:750,run:()=>bubble('TB se theek hone ke liye roz target poora karna zaroori hai. Kam khaane se sharir kamzor hota hai aur ilaaj dheema. Aaj ka chhota gap aaj hi bharein 🙂','in','Hitting the target every day matters for TB recovery. Under-eating weakens the body and slows treatment — close today’s small gap today.')},
+    ],()=>showChoices([{ic:'↩',label:'Phir se sochein',sub:'Try again',echo:'Phir se',go:dayQ}]));
+  } else {
+    seq([
+      {wait:450,run:()=>bubble('❌ <b>Abhi bhi sahi nahi.</b> Koi baat nahi — ek aasaan, saste vikalp ke saath 👇','in','Still not right — no worries. Here’s an easy, low-cost option.','wrong')},
+      {wait:700,run:()=>bubble('Chahein to main aapki <b>ASHA</b> ko bata doon taaki wo evening snacks mein madad karein?','in','If you like, I can let your ASHA know so she can help with evening snacks.','reward')},
+      {wait:700,run:()=>bubble('✅ <b>Sahi jawaab:</b> ek protein-wala halka snack lein — gap aaj hi bhar jaata hai.','in','The correct answer: a protein-rich snack — it closes the gap today.')},
+    ],daySuggest);
+  }}
+function dayRight(){
+  seq([
+    {wait:500,run:()=>bubble('Bilkul sahi 👏 Halka protein-wala snack gap bhar dega.','in','Exactly — a light, protein-rich snack closes the gap.')},
+    {wait:500,run:()=>starMsg('Sahi soch.','')},
+  ],daySuggest);}
+function daySuggest(){stage('d_suggest');score++;
+  seq([
+    {wait:650,run:()=>bubble('Aapke liye ek sasta, aaspaas milne wala snack 👇','in','A cheap, locally available snack for you:')},
+    {wait:650,run:()=>nutriCard([['🥤 Sattu drink (1 glass)','190','12'],['🥜 Moongphali (mutthi bhar)','100','5']],'290','17')},
+    {wait:600,run:()=>bubble('Ye dono target poora kar dega 🎯','in','This brings both targets home.')},
+  ],dayLog);}
+function dayLog(){stage('d_log');
+  seq([{wait:650,run:()=>bubble('Snack log karun?','in','Shall I log the snack?')}],()=>{
+    showChoices([{ic:'✔',label:'Haan, log karein',sub:'Yes, log it',echo:'Haan, log karein',go:()=>{setTotals(2040,59);seq([{wait:500,run:()=>bubble('Ho gaya. Ab aapka din 👇','in','Done. Here’s your day now:')},{wait:300,run:progCard}],dayShare);}}],'Tap to log');});}
+function dayShare(){stage('d_share');
+  seq([
+    {wait:700,run:()=>bubble('Aapne lagatar 7 din target poora kiya 🔥 Kya main ye progress aapki <b>ASHA</b> ke saath share karun?','in','You’ve hit your target 7 days running. Shall I share this progress with your ASHA?')},
+    {wait:600,run:()=>sysM('🔐 Sharing is opt-in. Your meal data supports your care — it is never used to judge you or affect any benefit.')},
+  ],()=>{
+    showChoices([
+      {ic:'✔',label:'Haan, ASHA ko bhejein',sub:'Yes, share with my ASHA',echo:'Haan, share karein',go:dayReward},
+      {ic:'🔒',label:'Nahi, abhi private rakhein',sub:'No, keep it private',echo:'Abhi private rakhein',go:dayReward},
+    ],'Aapki marzi · your choice');});}
+function dayReward(){stage('d_reward');
+  seq([
+    {wait:800,run:()=>bubble('🎉 <b>Aaj dono target poore!</b> 2040 kcal · 59g protein. "Poshan Champion" badge mila 🏅 — aap theek hone ki raah par hain 💪','in','Both targets met today! 2040 kcal, 59g protein. Earned the "Poshan Champion" badge — you’re on the road to recovery.','reward')},
+  ],()=>showChoices([{ic:'▸',label:'Aage badhein',sub:'Continue',echo:'Aage badhein',go:daySched}],'Tap to continue'));}
+function daySched(){stage('d_sched');
+  seq([{wait:650,run:()=>bubble('Kal subah <b>8 baje</b> nashte ka reminder bhej dungi. Streak: 8 din 🔥 Shabaash!','in','I’ll remind you for breakfast at 8am tomorrow. Streak: 8 days. Well done!')}],closeOut);}
+function closeOut(){
+  showChoices([
+    {ic:'≡',label:'Shuru se dekhein',sub:'Back to the start',echo:'Menu',go:()=>{bubble('Theek hai.','in');setTimeout(openTracker,450);}},
+    {ic:'↺',label:'Demo dobara chalayein',sub:'Restart the demo',echo:false,go:restart},
+  ],'Aage kya karein');}
+
+/* ---- click a journey step to play from there ---- */
+const JUMP={
+  trigger:start, open:openTracker,
+  cap:mealCapture, rec:function(){bubble('2 roti, dal, chawal, paneer sabzi, thoda salad','out');setTimeout(mealRead,300);},
+  confirm:mealConfirm, rfix:function(){mealFix();},
+  breakdown:mealBreakdown, progress:function(){setTotals(820,38);mealProgress();},
+  gap:function(){setTotals(820,38);proteinGapQ();}, rgap:function(){wrong1=0;setTotals(820,38);gapWrong();},
+  reward:function(){setTotals(1110,58);mealReward();}, sched:function(){setTotals(1110,58);mealSched();},
+  d_open:dayOpen, d_q:function(){setTotals(1750,42);dayQ();}, d_rem:function(){wrong2=0;setTotals(1750,42);dayWrong();},
+  d_suggest:function(){setTotals(1750,42);daySuggest();}, d_log:function(){setTotals(1750,42);dayLog();},
+  d_share:function(){setTotals(2040,59);dayShare();}, d_reward:function(){setTotals(2040,59);dayReward();}, d_sched:function(){setTotals(2040,59);daySched();}
+};
+function setMobileTab(t){
+  document.body.classList.remove('tab-demo','tab-journey');
+  document.body.classList.add('tab-'+t);
+  document.querySelectorAll('.mtab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+}
+function jumpTo(id){
+  if(!JUMP[id]) return;
+  if(window.matchMedia && window.matchMedia('(max-width:640px)').matches) setMobileTab('demo');
+  chat.innerHTML='';clearChoices();wrong1=0;wrong2=0;
+  sysM('▶ Demo started from this step (clicked in the journey)');
+  JUMP[id]();
+}
+buildJourney();
+start();
+</script>
+</body>
+</html>
